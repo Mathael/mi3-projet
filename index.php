@@ -1,0 +1,54 @@
+<?php
+/**
+ * @author: LEBOC Philippe
+ * Date: 07/10/2016
+ * Time: 17:30
+ */
+?>
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Base de données d'images</title>
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+<?php
+    // Affichage des erreurs
+
+    ini_set('display_errors',1);
+    ini_set('display_startup_errors',1);
+    error_reporting(E_ALL | E_STRICT);
+
+    // Directories
+    define('PROJECT_DIR', realpath('./'));
+    define('FRONT_CONTROLER', 'Yes I\'m coming from front controller !');
+    define('CONTROLLER_DIR', PROJECT_DIR.'/controllers/');
+    define('MODEL_DIR', PROJECT_DIR.'/model/');
+    define('DAO_DIR', PROJECT_DIR.'/dao/');
+    define('VIEW_DIR', PROJECT_DIR.'/view/');
+    define('IMG_DIR', PROJECT_DIR.'/assets/images/jons/');
+
+    // Object
+    require_once MODEL_DIR.'Image.php';
+
+    // Vue constante sur: header,menu,footer
+    require_once  VIEW_DIR.'commons/header.html';
+    require_once VIEW_DIR.'commons/menu.html';
+
+    // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
+    $action = empty($_GET['action']) ? 'index' : htmlspecialchars($_GET['action']); // TODO: check difference between EMPTY and ISSET
+
+    // Routing de l'action vers le bon controller
+    switch($action)
+    {
+        case 'about': require_once CONTROLLER_DIR.'AboutController.php'; break;
+        default: require_once CONTROLLER_DIR.'Index.php';
+    }
+
+    // Vue constante sur le footer qui se place juste avant la fin de la page
+    require_once VIEW_DIR.'commons/footer.html';
+
+?>
+    </body>
+</html>
