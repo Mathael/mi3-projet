@@ -32,6 +32,7 @@
     require_once MODEL_DIR.'Image.class.php';
 
     // DAO
+    require_once DAO_DIR.'Database.class.php';
     require_once DAO_DIR.'ImageDAO.php';
 
     // Vue constante sur: header

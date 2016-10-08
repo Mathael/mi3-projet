@@ -18,10 +18,11 @@ class Database {
 
     private static $_instance = null;
 
-    public static function getInstance(){
-        if(is_null(self::$_instance)){
+    public static function getInstance() {
+        if(is_null(self::$_instance)) {
             try{
-                self::$_instance = new PDO('sqlite:database.db');
+                //self::$_instance = new PDO('sqlite:database.db');
+                self::$_instance = new PDO('mysql:host=localhost;dbname=php-image-project;charset=UTF8', 'root', '');
                 self::$_instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             }catch(PDOException $e){
                 die('Une erreur est survenue lors de l\'initialisation de la base de données : '.$e->getMessage());
