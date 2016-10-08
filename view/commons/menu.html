@@ -1,8 +1,13 @@
-<div id="menu">
+<nav id="menu">
     <h3>Menu</h3>
     <ul>
         <li><a href='?action=index'>Home</a></li>
         <li><a href='?action=about'>A propos</a></li>
         <li><a href='?action=pictures'>Photos</a></li>
+        <?php if(isset($menu) && !empty($menu)) {
+            foreach($menu as $key => $value) {
+                echo '<li><a href=\''.$value.'\'>'. $key .'</a></li>';
+            }
+        } ?>
     </ul>
-</div>
+</nav>

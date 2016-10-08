@@ -15,26 +15,27 @@
     <body>
 <?php
     // Affichage des erreurs
-
     ini_set('display_errors',1);
     ini_set('display_startup_errors',1);
     error_reporting(E_ALL | E_STRICT);
 
-    // Directories
+    // Définitions de constantes
     define('PROJECT_DIR', realpath('./'));
     define('FRONT_CONTROLER', 'Yes I\'m coming from front controller !');
     define('CONTROLLER_DIR', PROJECT_DIR.'/controllers/');
     define('MODEL_DIR', PROJECT_DIR.'/model/');
     define('DAO_DIR', PROJECT_DIR.'/dao/');
     define('VIEW_DIR', PROJECT_DIR.'/view/');
-    define('IMG_DIR', PROJECT_DIR.'/assets/images/jons/');
+    define('IMG_DIR', PROJECT_DIR.'/assets/images/jons');
 
     // Object
-    require_once MODEL_DIR.'Image.php';
+    require_once MODEL_DIR.'Image.class.php';
 
-    // Vue constante sur: header,menu,footer
-    require_once  VIEW_DIR.'commons/header.html';
-    require_once VIEW_DIR.'commons/menu.html';
+    // DAO
+    require_once DAO_DIR.'ImageDAO.php';
+
+    // Vue constante sur: header
+    require_once VIEW_DIR.'commons/header.html';
 
     // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
     $action = empty($_GET['action']) ? 'index' : htmlspecialchars($_GET['action']); // TODO: check difference between EMPTY and ISSET
@@ -42,6 +43,7 @@
     // Routing de l'action vers le bon controller
     switch($action)
     {
+        case 'pictures': require_once CONTROLLER_DIR.'ImageController.php'; break;
         case 'about': require_once CONTROLLER_DIR.'AboutController.php'; break;
         default: require_once CONTROLLER_DIR.'Index.php';
     }

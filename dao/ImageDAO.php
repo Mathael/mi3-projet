@@ -4,7 +4,7 @@ class ImageDAO {
 		# Chemin LOCAL où se trouvent les images
 		private $path = IMG_DIR;
 		# Chemin URL où se trouvent les images
-		const urlPath='http://localhost/'.IMG_DIR;
+		const urlPath='http://localhost/tp1/assets/images/jons';
 		
 		# Tableau pour stocker tous les chemins des images
 		private $imgEntry;
