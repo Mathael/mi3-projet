@@ -34,7 +34,7 @@ final class ImageDAO {
     public static function getPrevImage(Image $image) {
         $res = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
-        $stmt->bindValue('id', min(1, $image->getId()-1));
+        $stmt->bindValue('id', max(1, $image->getId()-1));
         $stmt->execute();
 
         if($result = $stmt->fetch()) {

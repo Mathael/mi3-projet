@@ -1,9 +1,19 @@
 <div id="corps">
-    <p>
-        <a href="?action=pictures&imgId=<?php echo $prevImgId; ?>&size=<?php echo $size; ?>">Prev</a>
-        <a href="?action=pictures&imgId=<?php echo $nextImgId; ?>&size=<?php echo $size; ?>">Next</a>
-    </p>
-    <a href="?action=pictures&zoom=<?php echo $zoom; ?>&imgId=<?php echo $imgId; ?>&size=<?php echo $size; ?>">
-        <img src="http://localhost/tp1/assets/images/<?php echo $imgUrl; ?>" width="<?php echo $size; ?>">
-    </a>
+    <section>
+        <p>
+            <a href="?action=pictures&imgId=<?php echo $prevImgId; ?>&size=<?php echo $size; ?>">Prev</a>
+            <a href="?action=pictures&imgId=<?php echo $nextImgId; ?>&size=<?php echo $size; ?>">Next</a>
+        </p>
+    </section>
+    <figure>
+        <a href="?action=pictures&zoom=<?php echo $zoom; ?>&imgId=<?php echo $imgId; ?>&size=<?php echo $size; ?>">
+            <img src="http://localhost/tp1/assets/images/<?php echo $imgUrl; ?>" width="<?php echo $size; ?>">
+        </a>
+        <figcaption>
+            <?php echo $img->getComment(); ?>
+        </figcaption>
+    </figure>
+    <section>
+        Catégorie : <?php echo $img->getCategory(); ?>
+    </section>
 </div>
