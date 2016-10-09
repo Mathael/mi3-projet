@@ -21,7 +21,7 @@
 
     // Définitions de constantes
     define('PROJECT_DIR', realpath('./'));
-    define('FRONT_CONTROLER', 'Yes I\'m coming from front controller !');
+    define('FRONT_CONTROLLER', 'Yes I\'m coming from front controller !');
     define('CONTROLLER_DIR', PROJECT_DIR.'/controllers/');
     define('MODEL_DIR', PROJECT_DIR.'/model/');
     define('DAO_DIR', PROJECT_DIR.'/dao/');
@@ -39,14 +39,14 @@
     require_once VIEW_DIR.'commons/header.html';
 
     // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
-    $action = empty($_GET['action']) ? 'index' : htmlspecialchars($_GET['action']); // TODO: check difference between EMPTY and ISSET
+    $page = empty($_GET['page']) ? 'index' : htmlspecialchars($_GET['page']); // TODO: check difference between EMPTY and ISSET
 
-    // Routing de l'action vers le bon controller
-    switch($action)
+    // Routing de la page vers le bon controller
+    switch($page)
     {
         case 'pictures': require_once CONTROLLER_DIR.'ImageController.php'; break;
         case 'about': require_once CONTROLLER_DIR.'AboutController.php'; break;
-        default: require_once CONTROLLER_DIR.'Index.php';
+        default: require_once CONTROLLER_DIR.'DefaultController.php';
     }
 
     // Vue constante sur le footer qui se place juste avant la fin de la page

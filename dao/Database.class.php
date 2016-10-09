@@ -1,5 +1,5 @@
 <?php
-if(!defined("FRONT_CONTROLER"))
+if(!defined("FRONT_CONTROLLER"))
 {
     throw new Exception();
 }

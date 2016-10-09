@@ -1,4 +1,8 @@
 <?php
+if(!defined("FRONT_CONTROLLER"))
+{
+    throw new Exception();
+}
 class Image {
 
     private $id;
