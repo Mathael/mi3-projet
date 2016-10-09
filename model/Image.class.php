@@ -30,7 +30,7 @@ class Image {
      * @param int $id
      * @return Image
      */
-    public function setId($id)
+    private function setId($id)
     {
         $this->id = $id;
         return $this;
@@ -48,7 +48,7 @@ class Image {
      * @param string $url
      * @return Image
      */
-    public function setUrl($url)
+    private function setUrl($url)
     {
         $this->url = $url;
         return $this;
@@ -66,7 +66,7 @@ class Image {
      * @param mixed $category
      * @return Image
      */
-    public function setCategory($category)
+    private function setCategory($category)
     {
         $this->category = $category;
         return $this;
@@ -84,7 +84,7 @@ class Image {
      * @param mixed $comment
      * @return Image
      */
-    public function setComment($comment)
+    private function setComment($comment)
     {
         $this->comment = $comment;
         return $this;

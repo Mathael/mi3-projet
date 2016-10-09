@@ -13,6 +13,19 @@ final class ImageDAO {
         return $image;
     }
 
+    public static function getImageList($id, $count) {
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id BETWEEN :id AND :nb');
+        $stmt->bindValue('id', $id);
+        $stmt->bindValue('nb', $id+$count-1);
+        $stmt->execute();
+
+        $res = [];
+        while($result = $stmt->fetch()) {
+            $res[] = new Image($result);
+        }
+        return $res;
+    }
+
     public static function getAll() {
         $stmt = Database::getInstance()->prepare('SELECT * FROM image');
         $stmt->execute();
@@ -56,14 +69,10 @@ final class ImageDAO {
     }
 
     public static function getImageCount() {
-        $res = 0;
         $stmt = Database::getInstance()->prepare('SELECT count(*) as cnt FROM image');
         $stmt->execute();
-
-        if($result = $stmt->fetch()) {
-            $res = $result['cnt'];
-        }
-        return $res;
+        $row = $stmt->fetch();
+        return $row[0];
     }
 
     public static function getRandomImage() {
