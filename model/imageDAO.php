@@ -9,7 +9,7 @@
 		# Chemin LOCAL où se trouvent les images
 		private $path="model/IMG";
 		# Chemin URL où se trouvent les images
-		const urlPath="http://localhost/image/model/IMG";
+		const urlPath="http://localhost/mi3-projet/image/model/IMG";
 		
 		# Tableau pour stocker tous les chemins des images
 		private $imgEntry;
