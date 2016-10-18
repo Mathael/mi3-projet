@@ -71,16 +71,18 @@ final class ImageDAO {
     public static function getImageCount() {
         $stmt = Database::getInstance()->prepare('SELECT count(*) as cnt FROM image');
         $stmt->execute();
+
         $row = $stmt->fetch();
-        return $row[0];
+        return $row['cnt'];
     }
 
     public static function getRandomImage() {
-        $image = NULL;
         $count = self::getImageCount();
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
         $stmt->bindValue('id', rand(1, $count));
         $stmt->execute();
+
+        $image = null;
 
         if($result = $stmt->fetch()) {
             $image = new Image($result);

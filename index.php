@@ -14,6 +14,11 @@
     </head>
     <body>
 <?php
+
+    /////////////////////////////////////////
+    /////       FRONT CONTROLLER        /////
+    /////////////////////////////////////////
+
     // Affichage des erreurs
     ini_set('display_errors',1);
     ini_set('display_startup_errors',1);
@@ -28,30 +33,50 @@
     define('VIEW_DIR', PROJECT_DIR.'/view/');
     define('IMG_DIR', PROJECT_DIR.'/assets/images/jons');
 
-    // Object
-    require_once MODEL_DIR.'Image.class.php';
+    // Objects
+    require_once MODEL_DIR.'ViewData.php';
+    require_once MODEL_DIR.'Image.php';
 
     // DAO
-    require_once DAO_DIR.'Database.class.php';
+    require_once DAO_DIR.'Database.php';
     require_once DAO_DIR.'ImageDAO.php';
+
+    // Interfaces
+    require_once CONTROLLER_DIR.'DefaultController.php';
+
+    // Controllers
+    require_once CONTROLLER_DIR.'TestController.php';
+    require_once CONTROLLER_DIR.'IndexController.php';
+    require_once CONTROLLER_DIR.'ImageController.php';
+    require_once CONTROLLER_DIR.'AboutController.php';
 
     // Vue constante sur: header
     require_once VIEW_DIR.'commons/header.html';
 
     // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
-    $page = empty($_GET['page']) ? 'index' : htmlspecialchars($_GET['page']); // TODO: check difference between EMPTY and ISSET
+    $page = empty($_GET['page']) ? null : ucfirst(htmlspecialchars($_GET['page'])).'Controller';
 
-    // Routing de la page vers le bon controller
-    switch($page)
-    {
-        case 'pictures': require_once CONTROLLER_DIR.'ImageController.php'; break;
-        case 'about': require_once CONTROLLER_DIR.'AboutController.php'; break;
-        default: require_once CONTROLLER_DIR.'DefaultController.php';
+    // La page par défaut est l'index
+    // - Cas où l'utilisateur n'a pas renseigné la page qu'il veut atteindre
+    // - Cas où l'utilisateur vient tout juste d'arriver sur le site
+    if($page == null || !class_exists($page)) {
+        $page = 'IndexController';
     }
+
+    // Récupère l'action demandée par l'utilisateur
+    $action = empty($_GET['action']) ? null : htmlspecialchars($_GET['action']).'Action';
+
+    // L'action par défaut est index
+    // Il est obligatoire d'avoir une action par défaut pour au moins appeler la méthode par défaut du controller
+    // La méthode par défaut d'un controller est: indexAction()
+    if($action == null || !method_exists($page, $action)) {
+        $action = 'indexAction';
+    }
+
+    call_user_func([$page, $action]);
 
     // Vue constante sur le footer qui se place juste avant la fin de la page
     require_once VIEW_DIR.'commons/footer.html';
-
 ?>
     </body>
 </html>

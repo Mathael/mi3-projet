@@ -1,35 +1,42 @@
 <?php
-    if(!defined("FRONT_CONTROLLER"))
-    {
-        throw new Exception();
+if(!defined("FRONT_CONTROLLER"))
+{
+    throw new Exception();
+}
+
+class ImageController implements DefaultController {
+
+    public static function indexAction() {
+        $data = new ViewData();
+        $data->addImage(ImageDAO::getFirstImage());
+
+        // Ajout des boutons au menu
+        self::buildMenu();
+
+        // Appel de la vue associée à l'action
+        require_once (VIEW_DIR . 'image.html');
     }
 
-    // Valeur par défaut
-    $size = 480;
+    public static function randomAction() {
+        $data = new ViewData();
+        $data->addImage(ImageDAO::getRandomImage());
 
-    // Recupère les éventuels paramètres
-    $displayImgCnt = isset($_GET['displaycount']) && is_numeric($_GET['displaycount']) ? $_GET['displaycount'] : 1;
-    $zoom = isset($_GET['zoom']) && is_numeric($_GET['zoom']) ? $zoom = $_GET['zoom'] : 1;
+        // Ajout des boutons au menu
+        self::buildMenu();
 
-    // Récupère l'ID de l'image demandée, sinon recupère l'ID de la première image
-    $img = NULL;
-    isset($_GET['imgId']) && is_numeric($_GET['imgId']) ? $img = ImageDAO::getImageList($_GET['imgId'], $displayImgCnt) : $img[] = ImageDAO::getFirstImage();
-    $imgId = $img[0]->getId();
+        // Appel de la vue associée à l'action
+        require_once (VIEW_DIR . 'image.html');
+    }
 
-    if ($zoom != 1) $size *= $zoom;
-
-    // Crée les variables nécessaires à la vue [image.html]
-    $prevImgId = ImageDAO::getPrevImage($img[0])->getId();
-    $nextImgId = ImageDAO::getNextImage($img[0])->getId();
-    $totalImageCount = ImageDAO::getImageCount();
-
-    // Gestion du menu
-    $menu['First'] = '?page=pictures&imgId=' . ImageDAO::getFirstImage()->getId();
-    $menu['Random'] = '?page=pictures&imgId=' . ImageDAO::getRandomImage()->getId();
-    $menu['More'] = '?page=pictures&imgId=' . $imgId . '&displaycount=' . min(($displayImgCnt * 2), $totalImageCount);
-    $menu['less'] = '?page=pictures&imgId=' . $imgId . '&displaycount=' . max(1, $displayImgCnt / 2);
-    $menu['Zoom +'] = '?page=pictures&zoom=' . ($zoom + 0.25) . '&imgId=' . $imgId;
-    $menu['Zoom -'] = '?page=pictures&zoom=' . ($zoom - 0.25) . '&imgId=' . $imgId;
-
-    require_once(VIEW_DIR . 'commons/menu.html');
-    require_once(VIEW_DIR . 'image.html');
+    private static function buildMenu() {
+        $menu = [
+            'first' => '?page=image',
+            'random' => '?page=image&action=random',
+            'more' => '?page=image&action=more',
+            'less' => '?page=image&action=less',
+            'zoom +' => '?page=image&action=zoomin',
+            'zoom -' => '?page=image&action=zoomout'
+        ];
+        require_once (VIEW_DIR . 'commons/menu.html');
+    }
+}

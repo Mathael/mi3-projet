@@ -1,25 +1,24 @@
 <section>
     <p>
-        <a href="?page=pictures&imgId=<?php echo $prevImgId; ?>&size=<?php echo $size; ?>">Prev</a>
-        <a href="?page=pictures&imgId=<?php echo $nextImgId; ?>&size=<?php echo $size; ?>">Next</a>
+        <a href="?page=image&action=previous">Prev</a>
+        <a href="?page=image&action=next">Next</a>
     </p>
 </section>
 <?php
-foreach($img as $article)
+foreach($data->getImages() as $image)
 {
-    $imgUrl = $article->getUrl();
 ?>
     <article>
         <figure>
-            <a href="?page=pictures&zoom=<?php echo $zoom; ?>&imgId=<?php echo $imgId; ?>&size=<?php echo $size; ?>">
-                <img src="http://localhost/tp1/assets/images/<?php echo $imgUrl; ?>" width="<?php echo $size; ?>">
+            <a href="?page=image">
+                <img src="http://localhost/tp1/assets/images/<?php echo $image->getUrl(); ?>" width="<?php echo $data->getSize(); ?>">
             </a>
             <figcaption>
-                <?php echo $article->getComment(); ?>
+                <?php echo $image->getComment(); ?>
             </figcaption>
         </figure>
         <section>
-            Catégorie : <?php echo $article->getCategory(); ?>
+            Catégorie : <?php echo $image->getCategory(); ?>
         </section>
     </article>
 <?php } ?>
