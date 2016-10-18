@@ -11,7 +11,7 @@ class Database {
     public static function getInstance(){
         if(is_null(self::$instance)){
             try{
-                self::$instance= new PDO('mysql:host=localhost;dbname=images','root',''); // pensez à importer le fichier sql dans MySql (create.sql & inster.sql)
+                self::$instance= new PDO('mysql:host=localhost;port=3307;dbname=images','root',''); // pensez à importer le fichier sql dans MySql (create.sql & inster.sql)
                 self::$instance->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             }
             catch (Exception $e){

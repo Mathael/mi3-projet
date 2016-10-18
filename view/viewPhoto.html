@@ -4,13 +4,16 @@
 				print "<p>\n";
     // pre-calcul de l'image précedente
     print "<a href=\"nonRealise.php\">Prev</a> ";
+
     // pre-calcul de l'image suivante
-    $newImg = $imgDAO->getNextImage($img);
+    $newImg = imageDAO::getNextImg($imgId);
     $newImgId=$newImg->getId();
     print "<a href=\"viewPhoto.php?imgId=$newImgId&size=$size\">Next</a>\n";
     print "</p>\n";
+
     # Affiche l'image avec une reaction au click
     print "<a href=\"zoom.php?zoom=1.25&imgId=$imgId&size=$size\">\n";
+
     // Réalise l'affichage de l'image
     $imgURL = $img->getURL();
     print "<img src=\"$imgURL\" width=\"$size\">\n";
