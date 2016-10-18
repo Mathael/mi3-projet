@@ -1,7 +1,11 @@
 <?php
-if(!defined("FRONT_CONTROLLER"))
+
+/**
+ * @author LEBOC Philippe
+ *
+ * DefaultController to be sure all our controller can call a default method action
+ */
+interface DefaultController
 {
-    throw new Exception();
+    public static function indexAction();
 }
-require_once(VIEW_DIR.'commons/menu.html');
-require_once(VIEW_DIR.'index.html');
