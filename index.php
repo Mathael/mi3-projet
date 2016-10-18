@@ -37,8 +37,8 @@
     $page = empty($_GET['page']) ? NULL : htmlspecialchars($_GET['page']); // implémentation d'un TERNAIRE -> Permet de verifier si GET §NULL et renseigne une valeur dans le cas contraire
     switch($page)
     {
-        case 'image':
-        case 'about':
+        case 'image':require_once CONTROLLER_DIR.'viewPhotoController.php'; break;
+        case 'about':require_once CONTROLLER_DIR.'aboutController.php'; break;
         default: require_once CONTROLLER_DIR.'indexController.php'; break;
     }
 
