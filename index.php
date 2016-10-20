@@ -1,4 +1,5 @@
 <?php
+session_start();
 /**
  * @author: LEBOC Philippe
  * Date: 07/10/2016
@@ -30,12 +31,16 @@
     define('CONTROLLER_DIR', PROJECT_DIR.'/controllers/');
     define('MODEL_DIR', PROJECT_DIR.'/model/');
     define('DAO_DIR', PROJECT_DIR.'/dao/');
+    define('UTIL_DIR', PROJECT_DIR.'/utils/');
     define('VIEW_DIR', PROJECT_DIR.'/view/');
     define('IMG_DIR', PROJECT_DIR.'/assets/images/jons');
 
     // Objects
     require_once MODEL_DIR.'ViewData.php';
     require_once MODEL_DIR.'Image.php';
+
+    // Classes utilitaires
+    require_once UTIL_DIR.'Util.php';
 
     // DAO
     require_once DAO_DIR.'Database.php';
