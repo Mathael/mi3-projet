@@ -1,4 +1,11 @@
 <?php
+
+/**
+ * Permet l'accès aux données et de les renvoyer sous forme d'instance
+ * ou de tableau d'instances.
+ *
+ * Class ImageDAO
+ */
 final class ImageDAO {
 
     public static function getImage($id) {

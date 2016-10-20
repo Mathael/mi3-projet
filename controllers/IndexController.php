@@ -4,6 +4,11 @@ if(!defined("FRONT_CONTROLLER"))
     throw new Exception();
 }
 
+/**
+ * Controller par défaut affichant la page d'accueil.
+ *
+ * Class IndexController
+ */
 class IndexController implements DefaultController {
 
     public static function indexAction() {
