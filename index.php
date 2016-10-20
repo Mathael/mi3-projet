@@ -73,7 +73,11 @@
         $action = 'indexAction';
     }
 
-    call_user_func([$page, $action]);
+    $parameters = $_GET;
+    unset($parameters['page']);
+    unset($parameters['action']);
+
+    call_user_func([$page, $action], $parameters);
 
     // Vue constante sur le footer qui se place juste avant la fin de la page
     require_once VIEW_DIR.'commons/footer.html';

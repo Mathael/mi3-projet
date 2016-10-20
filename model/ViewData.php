@@ -16,7 +16,8 @@ class ViewData {
     /**
      * @return array
      */
-    public function getImages(){
+    public function getImages()
+    {
         return $this->images;
     }
 
