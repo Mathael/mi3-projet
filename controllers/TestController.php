@@ -32,6 +32,4 @@ class TestController implements DefaultController {
     public static function seeAction() {
         echo 'SEE CALLED !';
     }
-
-
 }
