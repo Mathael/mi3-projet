@@ -8,8 +8,8 @@ final class ImageController implements DefaultController {
 
     public static function indexAction($params = []) {
         $size = 480; // Default size
-        $size *= self::getValue($params, 'size', 1);
-        $id = self::getValue($params, 'id', 1);
+        $size *= Util::getValue($params, 'size', 1);
+        $id = Util::getValue($params, 'id', 1);
 
         $data = new ViewData($size);
         $data->addImage(ImageDAO::getImage($id));
@@ -23,7 +23,7 @@ final class ImageController implements DefaultController {
 
     public static function randomAction($params = []) {
         $size = 480; // Default size
-        $size *= self::getValue($params, 'size', 1);
+        $size *= Util::getValue($params, 'size', 1);
 
         $data = new ViewData($size);
         $data->addImage(ImageDAO::getRandomImage());
@@ -40,8 +40,8 @@ final class ImageController implements DefaultController {
      * @param array $params
      */
     private static function buildMenu($params = []) {
-        $size = self::getValue($params, 'size', 1);
-        $display = self::getValue($params, 'display', 1);
+        $size = Util::getValue($params, 'size', 1);
+        $display = Util::getValue($params, 'display', 1);
 
         $menu = [
             'first' => '?page=image&size='.$size.'&display='.$display,
@@ -52,20 +52,5 @@ final class ImageController implements DefaultController {
             'zoom -' => '?page=image&action=zoomout'
         ];
         require_once (VIEW_DIR . 'commons/menu.html');
-    }
-
-    /**
-     * Fonction permettant de vérifier qu'une valeur existe bien dans un tableau
-     *  si oui : retourne la valeur présente dans le tableau
-     *  si non : retourne la valeur par défaut
-     * @param $tab
-     * @param $key
-     * @param $defaultValue
-     * @return mixed
-     */
-    private static function getValue($tab, $key, $defaultValue) {
-        if(array_key_exists($key, $tab))
-            return $tab[$key];
-        return $defaultValue;
     }
 }
