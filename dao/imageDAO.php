@@ -1,85 +1,92 @@
 <?php
+final class ImageDAO {
 
-	class ImageDAO
-    {
-        public static function getSize(){
-            $statement = Database::getInstance()->prepare("SELECT count(*) as cnt FROM image");
-            $result = $statement->execute();
+    public static function getImage($id) {
+        $image = NULL;
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
 
-            return $result['cnt'];
+        if($result = $stmt->fetch()) {
+            $image = new Image($result);
         }
-
-        public static function getById($id){
-            $statement = Database::getInstance()->prepare("SELECT * FROM image WHERE id=:idImg");
-            $statement->bindParam('idImg',$id);
-            $statement->execute();
-            $image=NULL;
-
-            if($result=$statement->fetch()){
-                var_dump($result);
-                $image=new image($result['path'],$result['id']);
-            }
-            return $image;
-        }
-
-        public static function getAllImages(){
-            $statement = Database::getInstance()->prepare("SELECT * FROM image");
-            $statement->execute();
-            $table = [];
-
-            while($result = $statement->fetch()){
-                $table[] = new image($result['path'],$result['id']);
-            }
-            return $table;
-        }
-
-        public static function getRandom(){
-            $rand = rand( 1 ,getSize());
-            $statement = Database::getInstance()->prepare("SELECT * FROM image WHERE id=:randID");
-            $statement->bindParam(randID,$rand);
-            $statement->execute();
-            $image=NULL;
-
-            if($result = $statement->fetch()){
-                $image = new image($result['path'],$result['id']);
-            }
-
-            return $image;
-        }
-
-        public static function getFirst(){
-
-            $statement = Database::getInstance()->prepare("SELECT * FROM image ORDER BY id ASC LIMIT 1");
-            $statement->execute();
-            $image=NULL;
-
-            if($result = $statement->fetch()){
-                $image = new image($result['path'],$result['id']);
-            }
-
-            return $image;
-        }
-
-        public static function getLast(){
-
-            $statement = Database::getInstance()->prepare("SELECT * FROM image ORDER BY id DESC LIMIT 1");
-            $statement->execute();
-            $image=NULL;
-
-            if($result = $statement->fetch()){
-                $image = new image($result['path'],$result['id']);
-            }
-            return $image;
-        }
-
-        public static function getNextImg($id){
-            if($id < self::getSize()){
-                return self::getFirst();
-            }
-            $image = self::getById($id + 1);
-
-            return $image;
-        }
+        return $image;
     }
 
-?>
+    public static function getImageList($id, $count) {
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id BETWEEN :id AND :nb');
+        $stmt->bindValue('id', $id);
+        $stmt->bindValue('nb', $id+$count-1);
+        $stmt->execute();
+
+        $res = [];
+        while($result = $stmt->fetch()) {
+            $res[] = new Image($result);
+        }
+        return $res;
+    }
+
+    public static function getAll() {
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image');
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, "Image");
+    }
+
+    public static function getFirstImage() {
+        $image = NULL;
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image ORDER BY id ASC LIMIT 1');
+        $stmt->execute();
+
+        if($result = $stmt->fetch()) {
+            $image = new Image($result);
+        }
+        return $image;
+    }
+
+    public static function getPrevImage(Image $image) {
+        $res = NULL;
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
+        $stmt->bindValue('id', max(1, $image->getId()-1));
+        $stmt->execute();
+
+        if($result = $stmt->fetch()) {
+            $image = new Image($result);
+        }
+        return $image;
+    }
+
+    public static function getNextImage(Image $image) {
+        $res = NULL;
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
+        $stmt->bindValue('id', $image->getId()+1);
+        $stmt->execute();
+
+        if($result = $stmt->fetch()) {
+            $res = new Image($result);
+        }
+        return $res;
+    }
+
+    public static function getImageCount() {
+        $stmt = Database::getInstance()->prepare('SELECT count(*) as cnt FROM image');
+        $stmt->execute();
+
+        $row = $stmt->fetch();
+        return $row['cnt'];
+    }
+
+    public static function getRandomImage() {
+        $count = self::getImageCount();
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
+        $stmt->bindValue('id', rand(1, $count));
+        $stmt->execute();
+
+        $image = null;
+
+        if($result = $stmt->fetch()) {
+            $image = new Image($result);
+        }
+        return $image;
+    }
+}
