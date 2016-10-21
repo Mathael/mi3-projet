@@ -4,7 +4,7 @@ if(!defined("FRONT_CONTROLLER"))
     throw new Exception();
 }
 
-class ImageController implements DefaultController {
+final class ImageController implements DefaultController {
 
     public static function indexAction($params = []) {
         $size = 480; // Default size

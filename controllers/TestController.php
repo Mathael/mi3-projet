@@ -4,7 +4,7 @@ if(!defined("FRONT_CONTROLLER"))
     throw new Exception();
 }
 
-class TestController implements DefaultController {
+final class TestController implements DefaultController {
 
     /**
      * TestController constructor.
