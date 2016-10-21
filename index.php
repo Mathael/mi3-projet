@@ -1,12 +1,23 @@
-<!DOCTYPE html>
-<html lang="fr" >
-<head>
-    <title>Site SIL3</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" type="text/css" href="assets/css/style.css" media="screen" title="Normal" />
-</head>
-<body>
 <?php
+/**
+ * @author: LEBOC Philippe
+ * Date: 07/10/2016
+ * Time: 17:30
+ */
+?>
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Base de données d'images</title>
+        <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+<?php
+
+    /////////////////////////////////////////
+    /////       FRONT CONTROLLER        /////
+    /////////////////////////////////////////
 
     // Affichage des erreurs
     ini_set('display_errors',1);
@@ -14,38 +25,62 @@
     error_reporting(E_ALL | E_STRICT);
 
     // Définitions de constantes
-    define('PROJECT_DIR', realpath('./')); // définis réprt courant projet
-    define('FRONT_CONTROLER', 'Yes I\'m coming from front controllers !');
+    define('PROJECT_DIR', realpath('./'));
+    define('FRONT_CONTROLLER', 'Yes I\'m coming from front controller !');
     define('CONTROLLER_DIR', PROJECT_DIR.'/controllers/');
     define('MODEL_DIR', PROJECT_DIR.'/model/');
     define('DAO_DIR', PROJECT_DIR.'/dao/');
     define('VIEW_DIR', PROJECT_DIR.'/view/');
     define('IMG_DIR', PROJECT_DIR.'/assets/images/jons');
 
-    // Object
-    require_once MODEL_DIR.'image.php';
+    // Objects
+    require_once MODEL_DIR.'ViewData.php';
+    require_once MODEL_DIR.'Image.php';
 
     // DAO
-    require_once DAO_DIR.'Database.class.php'; // singleton -> pour une instance de connexion avec bdd
-    require_once DAO_DIR.'imageDAO.php';
+    require_once DAO_DIR.'Database.php';
+    require_once DAO_DIR.'ImageDAO.php';
 
-    // Vue constante sur: header + nev
+    // Interfaces
+    require_once CONTROLLER_DIR.'DefaultController.php';
+
+    // Controllers
+    require_once CONTROLLER_DIR.'TestController.php';
+    require_once CONTROLLER_DIR.'IndexController.php';
+    require_once CONTROLLER_DIR.'ImageController.php';
+    require_once CONTROLLER_DIR.'AboutController.php';
+
+    // Vue constante sur: header
     require_once VIEW_DIR.'commons/header.html';
-    require_once VIEW_DIR.'commons/nav.html';
 
+    // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
+    $page = empty($_GET['page']) ? null : ucfirst(htmlspecialchars($_GET['page'])).'Controller';
 
-    $page = empty($_GET['page']) ? NULL : htmlspecialchars($_GET['page']); // implémentation d'un TERNAIRE -> Permet de verifier si GET §NULL et renseigne une valeur dans le cas contraire
-    switch($page)
-    {
-        case 'image':require_once CONTROLLER_DIR.'viewPhotoController.php'; break;
-        case 'about':require_once CONTROLLER_DIR.'aboutController.php'; break;
-        default: require_once CONTROLLER_DIR.'indexController.php'; break;
+    // La page par défaut est l'index
+    // - Cas où l'utilisateur n'a pas renseigné la page qu'il veut atteindre
+    // - Cas où l'utilisateur vient tout juste d'arriver sur le site
+    if($page == null || !class_exists($page)) {
+        $page = 'IndexController';
     }
 
-    // Vue constante sur: footer
+    // Récupère l'action demandée par l'utilisateur
+    $action = empty($_GET['action']) ? null : htmlspecialchars($_GET['action']).'Action';
+
+    // L'action par défaut est index
+    // Il est obligatoire d'avoir une action par défaut pour au moins appeler la méthode par défaut du controller
+    // La méthode par défaut d'un controller est: indexAction()
+    if($action == null || !method_exists($page, $action)) {
+        $action = 'indexAction';
+    }
+
+    $parameters = $_GET;
+    unset($parameters['page']);
+    unset($parameters['action']);
+
+    call_user_func([$page, $action], $parameters);
+
+    // Vue constante sur le footer qui se place juste avant la fin de la page
     require_once VIEW_DIR.'commons/footer.html';
-
-
 ?>
-</body>
+    </body>
 </html>
