@@ -9,7 +9,7 @@ if(!defined("FRONT_CONTROLLER"))
  *
  * Class IndexController
  */
-class IndexController implements DefaultController {
+final class IndexController implements DefaultController {
 
     public static function indexAction() {
         require_once (VIEW_DIR.'commons/menu.html');
