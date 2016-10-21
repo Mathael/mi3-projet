@@ -38,6 +38,7 @@ session_start();
     // Objects
     require_once MODEL_DIR.'ViewData.php';
     require_once MODEL_DIR.'Image.php';
+    require_once MODEL_DIR.'User.php';
 
     // Classes utilitaires
     require_once UTIL_DIR.'Util.php';
@@ -45,15 +46,17 @@ session_start();
     // DAO
     require_once DAO_DIR.'Database.php';
     require_once DAO_DIR.'ImageDAO.php';
+    require_once DAO_DIR.'UserDAO.php';
 
     // Interfaces
     require_once CONTROLLER_DIR.'DefaultController.php';
 
     // Controllers
-    require_once CONTROLLER_DIR.'TestController.php';
+    require_once CONTROLLER_DIR.'AboutController.php';
     require_once CONTROLLER_DIR.'IndexController.php';
     require_once CONTROLLER_DIR.'ImageController.php';
-    require_once CONTROLLER_DIR.'AboutController.php';
+    require_once CONTROLLER_DIR.'TestController.php';
+    require_once CONTROLLER_DIR.'SessionController.php';
 
     // Vue constante sur: header
     require_once VIEW_DIR.'commons/header.html';
