@@ -1,18 +1,40 @@
-<nav id="menu">
-    <h3>Menu</h3>
-    <ul>
-        <li><a href='?page=index'>Home</a></li>
-        <li><a href='?page=about'>A propos</a></li>
-        <li><a href='?page=image'>Photos</a></li>
-        <?php if(empty($_SESSION['ROLE'])) { ?>
-        <li><a href="?page=session">Connexion</a></li>
-        <li><a href="?page=session&action=registerform">Inscription</a></li>
-        <?php } else { ?>
-        <li><a href="?page=session&action=logout">Déconnexion</a></li>
-        <?php } if(isset($menu) && !empty($menu)) {
+<nav class="navbar navbar-dark bg-inverse panel panel-default">
+    <ul class="nav navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="?page=index'">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="?page=image">Photos</a>
+        </li>
+        <?php if(isset($menu) && !empty($menu)) {
             foreach($menu as $key => $value) {
-                echo '<li><a href=\''.$value.'\'>'. $key .'</a></li>';
+                echo '<li class="nav-item"><a class="nav-link" href=\''.$value.'\'>'. $key .'</a></li>';
             }
         } ?>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="supportedContentDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</a>
+            <div class="dropdown-menu" aria-labelledby="supportedContentDropdown">
+                <a class="dropdown-item" href="#">Action</a>
+                <a class="dropdown-item" href="#">Another action</a>
+                <a class="dropdown-item" href="#">Something else here</a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="?page=about">A propos</a>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav float-xs-right">
+    <?php if(empty($_SESSION['ROLE'])) { ?>
+        <li class="nav-item">
+            <a class="nav-link" href="?page=session">Connexion</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="?page=session&action=registerform">Inscription</a>
+        </li>
+    <?php } else { ?>
+        <li class="nav-item">
+            <a class="nav-link" href="?page=session&action=logout">Déconnexion</a>
+        </li>
+    <?php } ?>
     </ul>
 </nav>

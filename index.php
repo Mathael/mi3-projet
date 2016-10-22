@@ -11,9 +11,14 @@ session_start();
     <head>
         <meta charset="UTF-8" />
         <title>Base de données d'images</title>
+        <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/bootstrap-flex.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
+        <div class="container">
 <?php
 
     /////////////////////////////////////////
@@ -59,7 +64,7 @@ session_start();
     require_once CONTROLLER_DIR.'SessionController.php';
 
     // Vue constante sur: header
-    require_once VIEW_DIR.'commons/header.html';
+    //require_once VIEW_DIR.'commons/header.html';
 
     // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
     $page = empty($_GET['page']) ? null : ucfirst(htmlspecialchars($_GET['page'])).'Controller';
@@ -90,5 +95,7 @@ session_start();
     // Vue constante sur le footer qui se place juste avant la fin de la page
     require_once VIEW_DIR.'commons/footer.html';
 ?>
+        </div>
+        <script type="text/javascript" src="assets/js/bootstrap.min.js"
     </body>
 </html>
