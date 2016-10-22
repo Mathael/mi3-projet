@@ -24,7 +24,8 @@ final class UserDAO
     }
 
     /**
-     * @param $username
+     * Récupère un utilisateur par son nom d'utilisateur
+     * @param $username string
      * @return User|NULL
      */
     public static function getUserByUsername($username) {
@@ -36,6 +37,7 @@ final class UserDAO
     }
 
     /**
+     * Récupère tout les utilisateurs
      * @return array
      */
     public static function getAllUsers() {
@@ -46,8 +48,9 @@ final class UserDAO
     }
 
     /**
-     * @param $username
-     * @param $password
+     * Recupère un utilisateur en fonction de son nom d'utilisateur et de son mot de passe
+     * @param $username string
+     * @param $password string
      * @return array
      */
     public static function getUser($username, $password) {

@@ -84,7 +84,7 @@ class TemplateManager
     }
 
     /**
-     * Add HTML file to the current template
+     * Ajoute le contenu d'une page HTML dans la variable $file
      * @param $html
      * @return $this
      */
@@ -94,14 +94,14 @@ class TemplateManager
     }
 
     /**
-     * Affiche le contenu présent dans le TemplateManager
+     * Affiche le contenu présent dans $file
      */
     public function show() {
         echo $this->getFile();
     }
 
     /**
-     * Récupère le contenu d'un fichier HTML
+     * Récupère le contenu d'un fichier HTML se trouvant dans le dossier: view
      * @param $file string : le fichier HTML
      * @return string
      */

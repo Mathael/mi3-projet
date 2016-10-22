@@ -64,7 +64,7 @@ class Image {
     }
 
     /**
-     * @param mixed $category
+     * @param string $category
      * @return Image
      */
     private function setCategory($category)
@@ -74,7 +74,7 @@ class Image {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getComment()
     {
@@ -82,7 +82,7 @@ class Image {
     }
 
     /**
-     * @param mixed $comment
+     * @param string $comment
      * @return Image
      */
     private function setComment($comment)

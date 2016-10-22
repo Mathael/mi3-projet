@@ -41,7 +41,6 @@ session_start();
     define('IMG_DIR', PROJECT_DIR.'/assets/images/jons');
 
     // Objects
-    require_once MODEL_DIR.'ViewData.php';
     require_once MODEL_DIR.'Image.php';
     require_once MODEL_DIR.'User.php';
 

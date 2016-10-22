@@ -5,9 +5,7 @@ if(!defined("FRONT_CONTROLLER"))
 }
 
 /**
- * Controller par défaut affichant la page d'accueil.
- *
- * Class IndexController
+ * Controller par défaut affichant la page d'accueil
  */
 final class IndexController implements DefaultController {
     public static function indexAction() {

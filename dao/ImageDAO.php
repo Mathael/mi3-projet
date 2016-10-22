@@ -8,6 +8,11 @@
  */
 final class ImageDAO {
 
+    /**
+     * Retourne un objet Image en fonction de son id
+     * @param $id integer
+     * @return Image|null
+     */
     public static function getImage($id) {
         $image = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
@@ -20,6 +25,12 @@ final class ImageDAO {
         return $image;
     }
 
+    /**
+     * Retourne une liste d'objets Image en fonction d'un id de départ et d'un nombre maximum
+     * @param $id integer
+     * @param $count integer
+     * @return array
+     */
     public static function getImageList($id, $count) {
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id >= :id AND id <= :nb');
         $stmt->bindValue('id', $id);
@@ -33,6 +44,10 @@ final class ImageDAO {
         return $res;
     }
 
+    /**
+     * Retourne un tableau d'objets Image correspondant à l'ensemble des lignes (row) de la table image
+     * @return array
+     */
     public static function getAll() {
         $stmt = Database::getInstance()->prepare('SELECT * FROM image');
         $stmt->execute();
@@ -40,6 +55,10 @@ final class ImageDAO {
         return $stmt->fetchAll(PDO::FETCH_CLASS, "Image");
     }
 
+    /**
+     * Retourne la première image de la table (ordonnée par l'id)
+     * @return Image|null
+     */
     public static function getFirstImage() {
         $image = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image ORDER BY id ASC LIMIT 1');
@@ -51,6 +70,11 @@ final class ImageDAO {
         return $image;
     }
 
+    /**
+     * Retourne l'image précédant celle passée en paramètre
+     * @param Image $image
+     * @return Image
+     */
     public static function getPrevImage(Image $image) {
         $res = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
@@ -63,6 +87,11 @@ final class ImageDAO {
         return $image;
     }
 
+    /**
+     * Retourne l'image suivant celle passée en paramètre
+     * @param Image $image
+     * @return Image|null
+     */
     public static function getNextImage(Image $image) {
         $res = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
@@ -75,6 +104,10 @@ final class ImageDAO {
         return $res;
     }
 
+    /**
+     * Retourne le nombre d'images présentes dans la table image
+     * @return Integer
+     */
     public static function getImageCount() {
         $stmt = Database::getInstance()->prepare('SELECT count(*) as cnt FROM image');
         $stmt->execute();
@@ -83,6 +116,10 @@ final class ImageDAO {
         return $row['cnt'];
     }
 
+    /**
+     * Retourne une image choisie aléatoirement
+     * @return Image|null
+     */
     public static function getRandomImage() {
         $count = self::getImageCount();
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
@@ -97,6 +134,11 @@ final class ImageDAO {
         return $image;
     }
 
+    /**
+     * Retourne une liste d'images choisie aléatoirement
+     * @param $displayCnt integer
+     * @return array
+     */
     public static function getRandomImageList($displayCnt) {
         if($displayCnt <= 0 || !is_numeric($displayCnt)) {
             die('Le nombre d images doit être un entier supérieur à zero');
