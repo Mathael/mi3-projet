@@ -21,7 +21,7 @@ final class ImageDAO {
     }
 
     public static function getImageList($id, $count) {
-        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id BETWEEN :id AND :nb');
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id >= :id AND id <= :nb');
         $stmt->bindValue('id', $id);
         $stmt->bindValue('nb', $id+$count-1);
         $stmt->execute();
