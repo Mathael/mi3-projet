@@ -16,8 +16,9 @@ final class SessionController implements DefaultController
      * Affichage de la page de connexion
      */
     public static function indexAction() {
-        require_once(VIEW_DIR.'commons/menu.html');
-        require_once(VIEW_DIR.'sessions/login.html');
+        $template = new TemplateManager('');
+        $template->addTemplateFile('sessions/login');
+        $template->show();
     }
 
     /**
@@ -62,8 +63,9 @@ final class SessionController implements DefaultController
     }
 
     public static function registerformAction() {
-        require_once(VIEW_DIR.'commons/menu.html');
-        require_once(VIEW_DIR.'sessions/register.html');
+        $template = new TemplateManager('');
+        $template->addTemplateFile('sessions/register');
+        $template->show();
     }
 
     /**

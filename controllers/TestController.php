@@ -43,7 +43,7 @@ final class TestController implements DefaultController {
         // Test du moteur de template avec tableau de paramètres
         $template = new TemplateManager('tests/test_array');
         $template->assign('title', 'ITS WORKS !');
-        $template->assignArray('content', 'tests/test_array_add', $images);
+        $template->assignArrayObjects('content', 'tests/test_array_add', $images);
         $template->show();
     }
 

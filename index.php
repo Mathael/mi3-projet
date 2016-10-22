@@ -65,8 +65,8 @@ session_start();
     require_once CONTROLLER_DIR.'SessionController.php';
     require_once CONTROLLER_DIR.'TestController.php';
 
-    // Vue constante sur: header
-    //require_once VIEW_DIR.'commons/header.html';
+    // Vue constante sur: menu
+    require_once VIEW_DIR.'commons/menu.html';
 
     // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
     $page = empty($_GET['page']) ? null : ucfirst(htmlspecialchars($_GET['page'])).'Controller';

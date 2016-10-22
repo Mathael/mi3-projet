@@ -46,11 +46,21 @@ class TemplateManager
     }
 
     /**
+     * Remplace chaque {{$key}} de la vue, par la valeur correspondante du tableau associatif
+     * @param $array array
+     */
+    public function assignArray($array) {
+        foreach ($array as $key => $value) {
+            $this->assign($key, $value);
+        }
+    }
+
+    /**
      * @param $key string
      * @param $templateName string
      * @param $objects array
      */
-    public function assignArray($key, $templateName, $objects) {
+    public function assignArrayObjects($key, $templateName, $objects) {
         $result = '';
         $template = $this->getContent($templateName);
 
@@ -74,6 +84,16 @@ class TemplateManager
     }
 
     /**
+     * Add HTML file to the current template
+     * @param $html
+     * @return $this
+     */
+    public function addTemplateFile($html) {
+        $this->setFile($this->getFile() . $this->getContent($html));
+        return $this;
+    }
+
+    /**
      * Affiche le contenu présent dans le TemplateManager
      */
     public function show() {
@@ -86,6 +106,7 @@ class TemplateManager
      * @return string
      */
     private function getContent($file) {
+        if(empty($file)) return '';
         return file_get_contents(VIEW_DIR.$file.'.html');
     }
 
