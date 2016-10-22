@@ -21,7 +21,7 @@ final class ImageDAO {
     }
 
     public static function getImageList($id, $count) {
-        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id BETWEEN :id AND :nb');
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id >= :id AND id <= :nb');
         $stmt->bindValue('id', $id);
         $stmt->bindValue('nb', $id+$count-1);
         $stmt->execute();
@@ -95,5 +95,30 @@ final class ImageDAO {
             $image = new Image($result);
         }
         return $image;
+    }
+
+    public static function getRandomImageList($displayCnt) {
+        if($displayCnt <= 0 || !is_numeric($displayCnt)) {
+            die('Le nombre d images doit être un entier supérieur à zero');
+        }
+
+        $ids = [];
+        $max = self::getImageCount();
+        for($i = 0; $i < $displayCnt ; $i++) {
+            $ids[] = rand(1, $max);
+        }
+
+        $statement = 'SELECT * FROM image WHERE';
+        foreach ($ids as $id) {
+            if($id == $ids[0])
+                $statement .= ' id='.$id;
+            else
+                $statement .= ' OR id='.$id;
+        }
+
+        $stmt = Database::getInstance()->prepare($statement);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_CLASS, "Image");
     }
 }
