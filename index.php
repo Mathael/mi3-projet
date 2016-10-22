@@ -47,6 +47,7 @@ session_start();
 
     // Classes utilitaires
     require_once UTIL_DIR.'Util.php';
+    require_once UTIL_DIR.'TemplateManager.php';
 
     // DAO
     require_once DAO_DIR.'Database.php';
@@ -62,6 +63,7 @@ session_start();
     require_once CONTROLLER_DIR.'ImageController.php';
     require_once CONTROLLER_DIR.'TestController.php';
     require_once CONTROLLER_DIR.'SessionController.php';
+    require_once CONTROLLER_DIR.'TestController.php';
 
     // Vue constante sur: header
     //require_once VIEW_DIR.'commons/header.html';
