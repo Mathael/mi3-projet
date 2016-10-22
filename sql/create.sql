@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS `image`;
 CREATE TABLE `image` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `path` varchar(1024) DEFAULT NULL,
+  `url` varchar(1024) DEFAULT NULL,
   `category` varchar(64) DEFAULT NULL,
   `comment` varchar(1024) DEFAULT NULL,
   PRIMARY KEY (`id`)

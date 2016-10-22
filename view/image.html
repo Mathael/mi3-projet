@@ -4,21 +4,14 @@
         <a href="?page=image&action=next">Next</a>
     </p>
 </section>
-<?php
-foreach($data->getImages() as $image)
-{
-?>
-    <article>
-        <figure>
-            <a href="?page=image">
-                <img src="http://localhost/tp1/assets/images/<?php echo $image->getUrl(); ?>" width="<?php echo $data->getSize(); ?>">
-            </a>
-            <figcaption>
-                <?php echo $image->getComment(); ?>
-            </figcaption>
-        </figure>
-        <section>
-            Catégorie : <?php echo $image->getCategory(); ?>
-        </section>
-    </article>
-<?php } ?>
+<section>
+    <ul>
+        <li><a href="{{first}}">Première image</a></li>
+        <li><a href="{{random}}">Aléatoire</a></li>
+        <li><a href="{{more}}">Plus d'images</a></li>
+        <li><a href="{{less}}">Moins d'images</a></li>
+        <li><a href="{{zoom +}}">Zoom +</a></li>
+        <li><a href="{{zoom -}}">Zoom -</a></li>
+    </ul>
+</section>
+{{images}}

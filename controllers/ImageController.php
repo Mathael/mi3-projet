@@ -10,45 +10,67 @@ final class ImageController implements DefaultController {
         $size = 480; // Default size
         $size *= Util::getValue($params, 'size', 1);
         $id = Util::getValue($params, 'id', 1);
+        $display = Util::getValue($params, 'display', 1);
 
-        $data = new ViewData($size);
-        $data->addImage(ImageDAO::getImage($id));
+        $images = [];
+        if($display != 1) {
+            $images = ImageDAO::getImageList($id, $display);
+        } else $images[] = ImageDAO::getImage($id);
+
+
+        if(!$images) {
+            die('La ou les images sont inexistantes dans la base de données.'); // TODO: change me
+        }
 
         // Ajout des boutons au menu
-        self::buildMenu($params);
+        $menu = self::buildMenu($params);
 
         // Appel de la vue associée à l'action
-        require_once (VIEW_DIR . 'image.html');
+        $template = new TemplateManager('image');
+        $template->assignArrayObjects('images', 'image-small', $images);
+        $template->assign('size', $size);
+        $template->assignArray($menu);
+        $template->show();
     }
 
     public static function randomAction($params = []) {
         $size = 480; // Default size
         $size *= Util::getValue($params, 'size', 1);
+        $display = Util::getValue($params, 'display', 1);
 
-        $image = ImageDAO::getRandomImage();
+        $images = [];
+        if($display != 1) {
+            $images = ImageDAO::getRandomImageList($display);
+        } else $images[] = ImageDAO::getRandomImage();
 
-        $params['id'] = $image->getId();
+        if(!$images) {
+            //die('L\'image est inexistante dans la base de données.'); // TODO: change me
+        }
 
-        $data = new ViewData($size);
-        $data->addImage($image);
+        $params['id'] = $images[0]->getId();
 
         // Ajout des boutons au menu
-        self::buildMenu($params);
+        $menu = self::buildMenu($params);
 
         // Appel de la vue associée à l'action
-        require_once (VIEW_DIR . 'image.html');
+        $template = new TemplateManager('image');
+        $template->assignArrayObjects('images', 'image-small', $images);
+        $template->assign('size', $size);
+        $template->assignArray($menu);
+        $template->show();
     }
 
     /**
      * Construction du menu additionnel en préservant les paramètres [size] et [display]
      * @param array $params
+     * @return array
      */
     private static function buildMenu($params = []) {
         $size = Util::getValue($params, 'size', 1);
         $display = Util::getValue($params, 'display', 1);
         $imgId = Util::getValue($params, 'id', 1);
 
-        $menu = [
+        return [
             'first' => '?page=image&size='.$size.'&display='.$display,
             'random' => '?page=image&action=random&&id='.$imgId.'size='.$size.'&display='.$display,
             'more' => '?page=image&action=more&id='.$imgId.'&size='.$size.'&display='.$display * 2,
@@ -56,6 +78,5 @@ final class ImageController implements DefaultController {
             'zoom +' => '?page=image&id='.$imgId.'&size='.($size*1.25).'&display='.$display,
             'zoom -' => '?page=image&id='.$imgId.'&size='.($size*0.75).'&display='.$display
         ];
-        require_once (VIEW_DIR . 'commons/menu.html');
     }
 }

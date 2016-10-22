@@ -10,12 +10,13 @@ class Image {
     private $category;
     private $comment;
 
-    function __construct($params) {
-        $this
-            ->setId($params['id'])
-            ->setUrl($params['path'])
-            ->setCategory($params['category'])
-            ->setComment($params['comment']);
+    function __construct($params = []) {
+        if(!empty($params))
+            $this
+                ->setId($params['id'])
+                ->setUrl($params['url'])
+                ->setCategory($params['category'])
+                ->setComment($params['comment']);
     }
 
     /**
