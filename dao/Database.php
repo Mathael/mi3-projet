@@ -14,7 +14,7 @@ if(!defined("FRONT_CONTROLLER"))
  * les paramètres doivent être "binder" à la requête
  * Ensuite traité le retour grace à while($resultat = $statement->fetch())
  */
-class Database {
+final class Database {
 
     private static $_instance = null;
 
