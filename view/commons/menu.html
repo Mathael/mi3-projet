@@ -32,6 +32,11 @@
             <a class="nav-link" href="?page=session&action=registerform">Inscription</a>
         </li>
     <?php } else { ?>
+        <?php if($_SESSION['ROLE'] == User::$ROLE_ADMIN) { ?>
+        <li class="nav-item">
+            <a class="nav-link" href="?page=admin">Administration</a>
+        </li>
+        <?php } ?>
         <li class="nav-item">
             <a class="nav-link" href="?page=session&action=logout">Déconnexion [<?php echo $_SESSION['USERNAME']; ?>]</a>
         </li>
