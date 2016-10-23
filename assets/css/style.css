@@ -23,6 +23,19 @@ body {
 .panel-body {
     padding: 15px;
 }
+
+.card-deck > .card {
+    width: 300px;
+    max-width: 300px;
+    min-width: 300px;
+    margin-bottom: 8px;
+}
+
+.card-deck > .card > img {
+    width: 299px;
+    height: 225px;
+    background-position: center;
+}
    
 #entete {
  border-bottom: 1px dotted navy;
@@ -47,21 +60,10 @@ body {
   font-style: italic; 
   background-color: #99CCCC;
  }
-
-#corps{
-    padding: 10px;
-    border-left: 1px dotted navy;
-    overflow:hidden;
-}
  
-#corps a:link, a:visited, a:active {    
-  color: #483D8B; }
-  
-#corps a:hover { 
-  color: #FFFFFF;
-  font-style: italic; 
-  background-color: #99CCCC;
-  }
+a:link, a:visited, a:active {
+  color: #483D8B;
+}
 
 #pied {
 	margin-top: 20px;

@@ -1,13 +1,9 @@
-<article>
-    <figure>
-        <a href="?page=image">
-            <img src="http://localhost/tp1/assets/images/{{Image.url}}" width="{{size}}">
-        </a>
-        <figcaption>
-            {{Image.comment}}
-        </figcaption>
-    </figure>
-    <section>
-        Catégorie : {{Image.category}}
-    </section>
-</article>
+<div class="card">
+    <img class="card-img-top" src="http://localhost/tp1/assets/images/{{Image.url}}" alt="Loading problem">
+    <div class="card-block">
+        <h4 class="card-title">#{{Image.id}}</h4>
+        <p class="card-text">{{Image.comment}}</p>
+        <p class="card-text"><small class="text-muted">Catégorie : <span class="tag tag-info">{{Image.category}}</span></small></p>
+    </div>
+</div>
+
