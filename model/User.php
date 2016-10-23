@@ -14,17 +14,19 @@ class User
     private $id;
     private $username;
     private $password;
+    private $role;
 
     function __construct($params = []) {
         if(!empty($params))
             $this
                 ->setId($params['id'])
                 ->setUsername($params['username'])
-                ->setPassword($params['password']);
+                ->setPassword($params['password'])
+                ->setRole($params['role']);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getId()
     {
@@ -42,7 +44,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getUsername()
     {
@@ -50,7 +52,7 @@ class User
     }
 
     /**
-     * @param mixed $username
+     * @param string $username
      * @return User
      */
     private function setUsername($username)
@@ -60,7 +62,7 @@ class User
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPassword()
     {
@@ -68,7 +70,7 @@ class User
     }
 
     /**
-     * @param mixed $password
+     * @param string $password
      * @return User
      */
     private function setPassword($password)
@@ -76,4 +78,24 @@ class User
         $this->password = $password;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param $role string
+     * @return User
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+        return $this;
+    }
+
+
 }

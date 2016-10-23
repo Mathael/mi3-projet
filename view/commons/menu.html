@@ -33,7 +33,7 @@
         </li>
     <?php } else { ?>
         <li class="nav-item">
-            <a class="nav-link" href="?page=session&action=logout">Déconnexion</a>
+            <a class="nav-link" href="?page=session&action=logout">Déconnexion [<?php echo $_SESSION['USERNAME']; ?>]</a>
         </li>
     <?php } ?>
     </ul>

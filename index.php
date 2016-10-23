@@ -97,6 +97,7 @@ session_start();
     require_once VIEW_DIR.'commons/footer.html';
 ?>
         </div>
-        <script type="text/javascript" src="assets/js/bootstrap.min.js"
+        <script src="assets/js/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
     </body>
 </html>

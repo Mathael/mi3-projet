@@ -20,7 +20,13 @@ final class UserDAO
         $stmt->bindParam("id", $id);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'User');
+        $user = null;
+
+        if($res = $stmt->fetch()) {
+            $user = new User($res);
+        }
+
+        return $user;
     }
 
     /**
@@ -33,7 +39,13 @@ final class UserDAO
         $stmt->bindParam("username", $username);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'User');
+        $user = null;
+
+        if($res = $stmt->fetch()) {
+            $user = new User($res);
+        }
+
+        return $user;
     }
 
     /**
@@ -51,21 +63,26 @@ final class UserDAO
      * Recupère un utilisateur en fonction de son nom d'utilisateur et de son mot de passe
      * @param $username string
      * @param $password string
-     * @return array
+     * @return User|NULL
      */
     public static function getUser($username, $password) {
         $stmt = Database::getInstance()->prepare("SELECT * FROM user WHERE username = :username AND password = :password");
         $stmt->bindParam("username", $username);
         $stmt->bindParam("password", $password);
         $stmt->execute();
+        $user = null;
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'User');
+        if($res = $stmt->fetch()) {
+            $user = new User($res);
+        }
+
+        return $user;
     }
 
     /**
      * Vérifie que l'utilisateur existe
      * @param $username
-     * @return mixed
+     * @return boolean
      */
     public static function userExists($username) {
         $stmt = Database::getInstance()->prepare("SELECT count(*) as cnt FROM user WHERE username = :username");
@@ -83,10 +100,11 @@ final class UserDAO
      * @param $password
      * @return User|NULL
      */
-    public static function createUser($username, $password) {
-        $stmt = Database::getInstance()->prepare("INSERT INTO user(username, password) VALUES(:username, :password)");
+    public static function createUser($username, $password, $role) {
+        $stmt = Database::getInstance()->prepare("INSERT INTO user(username, password, role) VALUES(:username, :password, :role)");
         $stmt->bindParam("username", $username);
         $stmt->bindParam("password", $password);
+        $stmt->bindParam("role", $role);
         $stmt->execute();
 
         return self::getUserByUsername($username);

@@ -43,7 +43,8 @@ final class SessionController implements DefaultController
         session_reset();
 
         // Actuellement, seul l'admin se connecte donc tous les comptes sont admin.
-        $_SESSION['ROLE'] = User::$ROLE_ADMIN; // TODO: WARNING
+        $_SESSION['ROLE'] = $user->getRole();
+        $_SESSION['USERNAME'] = $user->getUsername();
 
         // Redirige vers la page d'index
         // TODO: notifier l'utilisateur qu'il est bien connecté
@@ -92,14 +93,15 @@ final class SessionController implements DefaultController
         }
 
         // Crée l'utilisateur
-        $user = UserDAO::createUser($username, $password);
+        $user = UserDAO::createUser($username, $password, User::$ROLE_ADMIN);
         if($user == null) {
             echo 'user null';
             return; // TODO: error page
         }
 
         session_reset();
-        $_SESSION['ROLE'] = User::$ROLE_ADMIN; // TODO: WARNING
+        $_SESSION['ROLE'] = $user->getRole();
+        $_SESSION['USERNAME'] = $user->getUsername();
 
         // Retour à l'index
         IndexController::indexAction();
