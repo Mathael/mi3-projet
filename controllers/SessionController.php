@@ -93,7 +93,7 @@ final class SessionController implements DefaultController
         }
 
         // Crée l'utilisateur
-        $user = UserDAO::createUser($username, $password, User::$ROLE_ADMIN);
+        $user = UserDAO::createUser($username, $password, User::$ROLE_USER);
         if($user == null) {
             echo 'user null';
             return; // TODO: error page
