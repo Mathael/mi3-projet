@@ -14,9 +14,10 @@ class TemplateManager
 
     /**
      * TemplateManager constructor.
+     * Si le paramètre n'est pas donné,
      * @param $file string : file name from the VIEW DIRECTORY
      */
-    function __construct($file) {
+    function __construct($file = '') {
         $this->setFile($this->getContent($file));
     }
 
@@ -79,7 +80,6 @@ class TemplateManager
             }
         }
 
-        //var_dump($result);
         $this->assign($key, $result);
     }
 

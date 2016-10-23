@@ -9,8 +9,7 @@ if(!defined("FRONT_CONTROLLER"))
  */
 final class IndexController implements DefaultController {
     public static function indexAction() {
-        $template = new TemplateManager('');
-        $template->addTemplateFile('index');
+        $template = new TemplateManager('index');
         $template->show();
     }
 }
