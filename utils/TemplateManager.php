@@ -56,6 +56,18 @@ class TemplateManager
         }
     }
 
+    public function assignObject($object) {
+        // La réflection permet d'accéder aux attributs privé (sinon il faudrait les passer en public)
+        $reflect = new ReflectionClass($object);
+        $props = $reflect->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
+
+        // Pour chaque objet, accède à ses attributs pour repérer les clé valeurs à modifier dans le HTML
+        foreach ($props as $attr) {
+            $method = 'get'.ucfirst($attr->getName());
+            $this->setFile(str_replace('{{'.get_class($object).'.'.$attr->getName().'}}', $object->$method(), $this->getFile()));
+        }
+    }
+
     /**
      * @param $key string
      * @param $templateName string
