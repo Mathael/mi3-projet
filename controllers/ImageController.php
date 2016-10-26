@@ -15,7 +15,7 @@ final class ImageController implements DefaultController {
         $images = [];
         if($display != 1) {
             $images = ImageDAO::getImageList($id, $display);
-        } else $images[] = ImageDAO::getImage($id);
+        } else $images[] = ImageDAO::getFirstImage();
 
 
         if(!$images) {
@@ -26,8 +26,14 @@ final class ImageController implements DefaultController {
         $menu = self::buildMenu($params);
 
         // Appel de la vue associée à l'action
-        $template = new TemplateManager('image');
-        $template->assignArrayObjects('images', 'image-small', $images);
+        $template = new TemplateManager('image/image');
+
+        // Les admins peuvent voir des boutons supplémentaires sur la page
+        if($_SESSION['ROLE'] == User::$ROLE_ADMIN)
+            $template->assignArrayObjects('images', 'image/image_small_admin', $images);
+        else
+           $template->assignArrayObjects('images', 'image/image_small', $images);
+
         $template->assign('size', $size);
         $template->assignArray($menu);
         $template->show();
@@ -53,8 +59,14 @@ final class ImageController implements DefaultController {
         $menu = self::buildMenu($params);
 
         // Appel de la vue associée à l'action
-        $template = new TemplateManager('image');
-        $template->assignArrayObjects('images', 'image-small', $images);
+        $template = new TemplateManager('image/image');
+
+        // Les admins peuvent voir des boutons supplémentaires sur la page
+        if($_SESSION['ROLE'] == User::$ROLE_ADMIN)
+            $template->assignArrayObjects('images', 'image/image_small_admin', $images);
+        else
+            $template->assignArrayObjects('images', 'image/image_small', $images);
+
         $template->assign('size', $size);
         $template->assignArray($menu);
         $template->show();

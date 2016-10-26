@@ -163,4 +163,19 @@ final class ImageDAO {
 
         return $stmt->fetchAll(PDO::FETCH_CLASS, "Image");
     }
+
+    public static function edit($id, $comment, $category) {
+        $stmt = Database::getInstance()->prepare('UPDATE image SET comment = :comment, category = :category WHERE id=:id');
+        $stmt->bindValue('comment', $comment);
+        $stmt->bindValue('category', $category);
+        $stmt->bindValue('id', $id);
+        return $stmt->execute();
+    }
+
+    public static function delete($id) {
+        $image = NULL;
+        $stmt = Database::getInstance()->prepare('DELETE FROM image WHERE id=:id');
+        $stmt->bindValue('id', $id);
+        return $stmt->execute();
+    }
 }
