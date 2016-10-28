@@ -1,6 +1,6 @@
 body {
-  font-family:"verdana", "arial", "sans-serif";
-  color: 	#1f7e9a;
+    font-family:"verdana", "arial", "sans-serif";
+    color: 	#1f7e9a;
 }
 
 .panel {
@@ -15,6 +15,7 @@ body {
 .panel {
     border: none;
 }
+
 .panel-default > .panel-heading {
     background-color: #485563;
     color: #ebebeb;
@@ -38,36 +39,37 @@ body {
 }
    
 #entete {
- border-bottom: 1px dotted navy;
+    border-bottom: 1px dotted navy;
 }
   
   
 #menu {
-	margin-top: 5px;
-	width:15%;
-	float: left;
+    margin-top: 5px;
+    width:15%;
+    float: left;
 }
 
 #menu h3 {
-	text-align:center;
-	}
-
-#menu a:link, a:visited, a:active {    
-  color: #483D8B; }
-  
-#menu a:hover { 
-  color: #FFFFFF;
-  font-style: italic; 
-  background-color: #99CCCC;
- }
- 
-a:link, a:visited, a:active {
-  color: #483D8B;
+    text-align:center;
 }
 
-#pied {
-	margin-top: 20px;
-	border: 1px dotted navy;
-	clear:left;
-  }
+#menu a:link, a:visited, a:active {    
+    color: #483D8B;
+}
+  
+#menu a:hover { 
+    color: #FFFFFF;
+    font-style: italic;
+    background-color: #99CCCC;
+}
+ 
+a:link, a:visited, a:active {
+    color: #483D8B;
+}
+
+footer {
+    margin-top: 20px;
+    border: 1px dotted navy;
+    clear:left;
+}
   

@@ -56,6 +56,18 @@ class TemplateManager
         }
     }
 
+    public function assignArrayTemplate($key, $template, $templateKey, $values) {
+        $result = '';
+        $template = $this->getContent($template);
+
+        foreach ($values as $value) {
+            $result .= $template;
+            $result = str_replace('{{'.$templateKey.'}}', $value, $result);
+        }
+
+        $this->assign($key, $result);
+    }
+
     public function assignObject($object) {
         // La réflection permet d'accéder aux attributs privé (sinon il faudrait les passer en public)
         $reflect = new ReflectionClass($object);

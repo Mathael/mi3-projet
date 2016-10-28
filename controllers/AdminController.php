@@ -17,6 +17,9 @@ final class AdminController implements DefaultController {
             IndexController::indexAction();
             return;
         }
+
+        $tempalte = new TemplateManager('admin/index');
+        $tempalte->show();
     }
 
     /**
@@ -97,6 +100,34 @@ final class AdminController implements DefaultController {
 
         $template->assignObject($image);
         $template->assign('result', ''); // clean; TODO
+        $template->show();
+    }
+
+    /**
+     * http://my-url/?page=admin&action=createImageForm
+     */
+    public static function createImageFormAction() {
+        if($_SESSION['ROLE'] != User::$ROLE_ADMIN) {
+            IndexController::indexAction();
+            return;
+        }
+
+        if(!empty($_FILES['file']) && !empty($_POST))
+        {
+            $file = $_FILES['file'];
+            if(move_uploaded_file($file['tmp_name'], IMG_DIR.$file['name'])) {
+                $category = Util::getValue($_POST, 'category', null);
+                $comment = Util::getValue($_POST, 'comment', null);
+
+                if($category != null && $comment != null)
+                    ImageDAO::create($file['name'], $category, $comment);
+            }
+        }
+
+        $categories = ImageDAO::getCategories();
+
+        $template = new TemplateManager('admin/image_create_form');
+        $template->assignArrayTemplate('categories', 'admin/image_create_form_small', 'category', $categories);
         $template->show();
     }
 }
