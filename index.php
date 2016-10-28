@@ -58,6 +58,7 @@ session_start();
 
     // Controllers
     require_once CONTROLLER_DIR.'AboutController.php';
+    require_once CONTROLLER_DIR.'AdminController.php';
     require_once CONTROLLER_DIR.'IndexController.php';
     require_once CONTROLLER_DIR.'ImageController.php';
     require_once CONTROLLER_DIR.'TestController.php';

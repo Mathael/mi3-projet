@@ -15,7 +15,7 @@ final class ImageController implements DefaultController {
         $images = [];
         if($display != 1) {
             $images = ImageDAO::getImageList($id, $display);
-        } else $images[] = ImageDAO::getImage($id);
+        } else $images[] = ImageDAO::getFirstImage();
 
 
         if(!$images) {
@@ -26,8 +26,14 @@ final class ImageController implements DefaultController {
         $menu = self::buildMenu($params);
 
         // Appel de la vue associée à l'action
-        $template = new TemplateManager('image');
-        $template->assignArrayObjects('images', 'image-small', $images);
+        $template = new TemplateManager('image/image');
+
+        // Les admins peuvent voir des boutons supplémentaires sur la page
+        if($_SESSION['ROLE'] == User::$ROLE_ADMIN)
+            $template->assignArrayObjects('images', 'image/image_small_admin', $images);
+        else
+           $template->assignArrayObjects('images', 'image/image_small', $images);
+
         $template->assign('size', $size);
         $template->assignArray($menu);
         $template->show();
@@ -53,8 +59,14 @@ final class ImageController implements DefaultController {
         $menu = self::buildMenu($params);
 
         // Appel de la vue associée à l'action
-        $template = new TemplateManager('image');
-        $template->assignArrayObjects('images', 'image-small', $images);
+        $template = new TemplateManager('image/image');
+
+        // Les admins peuvent voir des boutons supplémentaires sur la page
+        if($_SESSION['ROLE'] == User::$ROLE_ADMIN)
+            $template->assignArrayObjects('images', 'image/image_small_admin', $images);
+        else
+            $template->assignArrayObjects('images', 'image/image_small', $images);
+
         $template->assign('size', $size);
         $template->assignArray($menu);
         $template->show();
@@ -68,15 +80,15 @@ final class ImageController implements DefaultController {
     private static function buildMenu($params = []) {
         $size = Util::getValue($params, 'size', 1);
         $display = Util::getValue($params, 'display', 1);
-        $imgId = Util::getValue($params, 'id', 1);
+        $imgId = Util::getValue($params, 'id', ImageDAO::getFirstImage()->getId());
 
         return [
-            'first' => '?page=image&size='.$size.'&display='.$display,
-            'random' => '?page=image&action=random&&id='.$imgId.'size='.$size.'&display='.$display,
+            'first' => '?page=image&id='.$imgId.'&size='.$size.'&display='.$display,
+            'random' => '?page=image&action=random&id='.$imgId.'size='.$size.'&display='.$display,
             'more' => '?page=image&action=more&id='.$imgId.'&size='.$size.'&display='.$display * 2,
             'less' => '?page=image&action=less&id='.$imgId.'&size='.$size.'&display='.max(1, $display / 2),
-            'zoom +' => '?page=image&id='.$imgId.'&size='.($size*1.25).'&display='.$display,
-            'zoom -' => '?page=image&id='.$imgId.'&size='.($size*0.75).'&display='.$display
+            'zoom +' => '?page=image&id='.$imgId.'&size='.($size+0.25).'&display='.$display,
+            'zoom -' => '?page=image&id='.$imgId.'&size='.($size-.25).'&display='.$display
         ];
     }
 }

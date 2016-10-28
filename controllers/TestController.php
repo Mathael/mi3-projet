@@ -8,12 +8,13 @@ final class TestController implements DefaultController {
 
     /**
      * TestController constructor.
-     * Prevent anyone to instance a Controller ^_^
+     * Empeche quiconque d'instancier le controller ^_^
      */
     private function __construct() {}
 
     /**
      * Exemple d'implémentation de la méthode obligatoire
+     * http://my-url/?page=test
      */
     public static function indexAction() {
         // TODO: Implement indexAction() method.

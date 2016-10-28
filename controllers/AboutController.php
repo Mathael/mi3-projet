@@ -6,8 +6,7 @@ if(!defined("FRONT_CONTROLLER"))
 
 final class AboutController implements DefaultController {
     public static function indexAction() {
-        $template = new TemplateManager('');
-        $template->addTemplateFile('about');
+        $template = new TemplateManager('about');
         $template->show();
     }
 }

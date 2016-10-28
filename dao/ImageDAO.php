@@ -163,4 +163,50 @@ final class ImageDAO {
 
         return $stmt->fetchAll(PDO::FETCH_CLASS, "Image");
     }
+
+    public static function getCategories() {
+        $stmt = Database::getInstance()->prepare('SELECT category FROM image GROUP BY category');
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_COLUMN, 'category');
+    }
+
+    /**
+     * @param $id
+     * @param $comment
+     * @param $category
+     * @return bool
+     */
+    public static function edit($id, $comment, $category) {
+        $stmt = Database::getInstance()->prepare('UPDATE image SET comment = :comment, category = :category WHERE id=:id');
+        $stmt->bindValue('comment', $comment);
+        $stmt->bindValue('category', $category);
+        $stmt->bindValue('id', $id);
+        return $stmt->execute();
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public static function delete($id) {
+        $image = NULL;
+        $stmt = Database::getInstance()->prepare('DELETE FROM image WHERE id=:id');
+        $stmt->bindValue('id', $id);
+        return $stmt->execute();
+    }
+
+    /**
+     * @param $url
+     * @param $category
+     * @param $comment
+     * @return bool
+     */
+    public static function create($url, $category, $comment) {
+        $stmt = Database::getInstance()->prepare('INSERT INTO image(url, category, comment) VALUES (:url, :category, :comment)');
+        $stmt->bindValue('url', $url);
+        $stmt->bindValue('category', $category);
+        $stmt->bindValue('comment', $comment);
+        return $stmt->execute();
+    }
 }

@@ -1,0 +1,9 @@
+<form method="POST" action="?page=admin&action=createImageForm" accept-charset="UTF" enctype="multipart/form-data">
+    <input type="file" name="file" accept="image/*" />
+    <br/>
+    <input type="text" name="comment" required />
+    <select name="category" required>
+        {{categories}}
+    </select>
+    <input type="submit" value="Ajouter" />
+</form>

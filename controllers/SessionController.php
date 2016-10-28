@@ -16,8 +16,7 @@ final class SessionController implements DefaultController
      * Affichage de la page de connexion
      */
     public static function indexAction() {
-        $template = new TemplateManager('');
-        $template->addTemplateFile('sessions/login');
+        $template = new TemplateManager('sessions/login');
         $template->show();
     }
 
@@ -64,8 +63,7 @@ final class SessionController implements DefaultController
     }
 
     public static function registerformAction() {
-        $template = new TemplateManager('');
-        $template->addTemplateFile('sessions/register');
+        $template = new TemplateManager('sessions/register');
         $template->show();
     }
 

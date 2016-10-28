@@ -14,9 +14,10 @@ class TemplateManager
 
     /**
      * TemplateManager constructor.
+     * Si le paramètre n'est pas donné,
      * @param $file string : file name from the VIEW DIRECTORY
      */
-    function __construct($file) {
+    function __construct($file = '') {
         $this->setFile($this->getContent($file));
     }
 
@@ -55,6 +56,30 @@ class TemplateManager
         }
     }
 
+    public function assignArrayTemplate($key, $template, $templateKey, $values) {
+        $result = '';
+        $template = $this->getContent($template);
+
+        foreach ($values as $value) {
+            $result .= $template;
+            $result = str_replace('{{'.$templateKey.'}}', $value, $result);
+        }
+
+        $this->assign($key, $result);
+    }
+
+    public function assignObject($object) {
+        // La réflection permet d'accéder aux attributs privé (sinon il faudrait les passer en public)
+        $reflect = new ReflectionClass($object);
+        $props = $reflect->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
+
+        // Pour chaque objet, accède à ses attributs pour repérer les clé valeurs à modifier dans le HTML
+        foreach ($props as $attr) {
+            $method = 'get'.ucfirst($attr->getName());
+            $this->setFile(str_replace('{{'.get_class($object).'.'.$attr->getName().'}}', $object->$method(), $this->getFile()));
+        }
+    }
+
     /**
      * @param $key string
      * @param $templateName string
@@ -79,7 +104,6 @@ class TemplateManager
             }
         }
 
-        //var_dump($result);
         $this->assign($key, $result);
     }
 

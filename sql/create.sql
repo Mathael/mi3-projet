@@ -12,5 +12,6 @@ CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(30) CHARACTER SET utf8 NOT NULL,
   `password` varchar(30) CHARACTER SET utf8 NOT NULL,
+  `role` varchar(10) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id`,`username`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
