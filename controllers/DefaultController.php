@@ -1,5 +1,7 @@
 <?php
 
+namespace App\controllers;
+
 /**
  * @author LEBOC Philippe
  *

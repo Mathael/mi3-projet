@@ -1,5 +1,10 @@
 <?php
 
+namespace App\dao;
+
+use App\model\Image;
+use PDO;
+
 /**
  * Permet l'accès aux données et de les renvoyer sous forme d'instance
  * ou de tableau d'instances.

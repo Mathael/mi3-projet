@@ -1,5 +1,10 @@
 <?php
 
+namespace App\dao;
+
+use App\model\User;
+use PDO;
+
 /**
  * @author LEBOC Philipe
  * Date: 20/10/2016

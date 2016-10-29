@@ -6,7 +6,9 @@
         <li class="nav-item">
             <a class="nav-link" href="?page=image">Photos</a>
         </li>
-        <?php if(isset($menu) && !empty($menu)) {
+        <?php use App\model\User;
+
+        if(isset($menu) && !empty($menu)) {
             foreach($menu as $key => $value) {
                 echo '<li class="nav-item"><a class="nav-link" href=\''.$value.'\'>'. $key .'</a></li>';
             }

@@ -1,5 +1,10 @@
 <?php
 
+namespace App\utils;
+
+use ReflectionClass;
+use ReflectionProperty;
+
 /**
  * @author LEBOC Philippe
  * Date: 22/10/2016

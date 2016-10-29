@@ -1,8 +1,8 @@
 <?php
-if(!defined("FRONT_CONTROLLER"))
-{
-    throw new Exception();
-}
+
+namespace App\controllers;
+
+use App\utils\TemplateManager;
 
 /**
  * Controller par défaut affichant la page d'accueil

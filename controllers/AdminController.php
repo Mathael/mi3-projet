@@ -1,8 +1,11 @@
 <?php
-if(!defined("FRONT_CONTROLLER"))
-{
-    throw new Exception();
-}
+
+namespace App\controllers;
+use App\dao\ImageDAO;
+use App\model\Image;
+use App\model\User;
+use App\utils\TemplateManager;
+use App\utils\Util;
 
 /**
  * Gestion des requêtes destinées à l'administration des Images et des utilisateurs

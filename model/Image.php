@@ -1,8 +1,7 @@
 <?php
-if(!defined("FRONT_CONTROLLER"))
-{
-    throw new Exception();
-}
+
+namespace App\model;
+
 class Image {
 
     private $id;

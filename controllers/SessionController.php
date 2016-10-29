@@ -1,5 +1,11 @@
 <?php
 
+namespace App\controllers;
+use App\dao\UserDAO;
+use App\model\User;
+use App\utils\TemplateManager;
+use App\utils\Util;
+
 /**
  * @author LEBOC Philippe
  * Date: 20/10/2016
