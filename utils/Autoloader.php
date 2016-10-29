@@ -6,6 +6,8 @@ namespace App\utils;
  * @author LEBOC Philippe.
  * Date: 28/10/2016
  * Time: 22:52
+ *
+ * @Link http://php.net/manual/fr/function.spl-autoload-register.php
  */
 class Autoloader
 {
