@@ -1,8 +1,9 @@
 <?php
-if(!defined("FRONT_CONTROLLER"))
-{
-    throw new Exception();
-}
+
+namespace App\controllers;
+
+use App\dao\ImageDAO;
+use App\utils\TemplateManager;
 
 final class TestController implements DefaultController {
 

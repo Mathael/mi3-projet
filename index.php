@@ -1,5 +1,11 @@
 <?php
+
+namespace App;
+
+use App\utils\Autoloader;
+
 session_start();
+
 /**
  * @author: LEBOC Philippe
  * Date: 07/10/2016
@@ -31,51 +37,32 @@ session_start();
     error_reporting(E_ALL | E_STRICT);
 
     // Définitions de constantes
-    define('PROJECT_DIR', realpath('./'));
+    define('DS', DIRECTORY_SEPARATOR); // Séparateur de fichier définit pas l'installation PHP donc variera en fonction de l'OS installé.
+    define('PROJECT_DIR', dirname(__FILE__).DS);
+    // define('PROJECT_DIR', realpath('./')); une autre façon de faire la même chose
     define('FRONT_CONTROLLER', 'Yes I\'m coming from front controller !');
-    define('CONTROLLER_DIR', PROJECT_DIR.'/controllers/');
-    define('MODEL_DIR', PROJECT_DIR.'/model/');
-    define('DAO_DIR', PROJECT_DIR.'/dao/');
-    define('UTIL_DIR', PROJECT_DIR.'/utils/');
-    define('VIEW_DIR', PROJECT_DIR.'/view/');
-    define('IMG_DIR', PROJECT_DIR.'/assets/images/jons');
+    define('CONTROLLER_DIR', PROJECT_DIR.'controllers'.DS);
+    define('MODEL_DIR', PROJECT_DIR.'model'.DS);
+    define('DAO_DIR', PROJECT_DIR.'dao'.DS);
+    define('UTIL_DIR', PROJECT_DIR.'utils'.DS);
+    define('VIEW_DIR', PROJECT_DIR.'view'.DS);
+    define('IMG_DIR', PROJECT_DIR.'assets'.DS.'images'.DS.'jons');
 
-    // Objects
-    require_once MODEL_DIR.'Image.php';
-    require_once MODEL_DIR.'User.php';
-
-    // Classes utilitaires
-    require_once UTIL_DIR.'Util.php';
-    require_once UTIL_DIR.'TemplateManager.php';
-
-    // DAO
-    require_once DAO_DIR.'Database.php';
-    require_once DAO_DIR.'ImageDAO.php';
-    require_once DAO_DIR.'UserDAO.php';
-
-    // Interfaces
-    require_once CONTROLLER_DIR.'DefaultController.php';
-
-    // Controllers
-    require_once CONTROLLER_DIR.'AboutController.php';
-    require_once CONTROLLER_DIR.'AdminController.php';
-    require_once CONTROLLER_DIR.'IndexController.php';
-    require_once CONTROLLER_DIR.'ImageController.php';
-    require_once CONTROLLER_DIR.'TestController.php';
-    require_once CONTROLLER_DIR.'SessionController.php';
-    require_once CONTROLLER_DIR.'TestController.php';
+    require UTIL_DIR.'Autoloader.php';
+    Autoloader::register();
 
     // Vue constante sur: menu
     require_once VIEW_DIR.'commons/menu.html';
 
     // Récupère la page vers laquelle l'utilisaur souhaite se rendre.
-    $page = empty($_GET['page']) ? null : ucfirst(htmlspecialchars($_GET['page'])).'Controller';
+    $page = empty($_GET['page']) ? null : ucfirst(strtolower(htmlspecialchars($_GET['page']))).'Controller';
+    $controller =  'App\\controllers\\'.$page;
 
     // La page par défaut est l'index
     // - Cas où l'utilisateur n'a pas renseigné la page qu'il veut atteindre
     // - Cas où l'utilisateur vient tout juste d'arriver sur le site
-    if($page == null || !class_exists($page)) {
-        $page = 'IndexController';
+    if($page == null || !file_exists(CONTROLLER_DIR.$page.'.php') || !class_exists($controller)) {
+        $controller = 'App\\controllers\\IndexController';
     }
 
     // Récupère l'action demandée par l'utilisateur
@@ -84,15 +71,15 @@ session_start();
     // L'action par défaut est index
     // Il est obligatoire d'avoir une action par défaut pour au moins appeler la méthode par défaut du controller
     // La méthode par défaut d'un controller est: indexAction()
-    if($action == null || !method_exists($page, $action)) {
+    if($action == null || !method_exists($controller, $action)) {
         $action = 'indexAction';
     }
 
-    $parameters = $_GET;
-    unset($parameters['page']);
-    unset($parameters['action']);
-
-    call_user_func([$page, $action], $parameters);
+    // function PHP permettant de lancer un appel de d'une fonction d'une class.
+    // en paramètre :
+    // - Tableau contenant la classe et la fonction à executer
+    // - Second paramètre optionnel : les paramètres de la fonction à executer
+    call_user_func([$controller, $action]);
 
     // Vue constante sur le footer qui se place juste avant la fin de la page
     require_once VIEW_DIR.'commons/footer.html';

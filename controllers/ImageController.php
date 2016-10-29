@@ -1,8 +1,11 @@
 <?php
-if(!defined("FRONT_CONTROLLER"))
-{
-    throw new Exception();
-}
+
+namespace App\controllers;
+
+use App\dao\ImageDAO;
+use App\model\User;
+use App\utils\TemplateManager;
+use App\utils\Util;
 
 final class ImageController implements DefaultController {
 

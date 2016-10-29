@@ -1,8 +1,10 @@
 <?php
-if(!defined("FRONT_CONTROLLER"))
-{
-    throw new Exception();
-}
+
+namespace App\dao;
+
+use PDO;
+use PDOException;
+
 /**
  * @author LEBOC Philippe
  * Date: 07/10/2016
