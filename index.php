@@ -15,6 +15,7 @@ session_start();
         <link href="assets/css/bootstrap-flex.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/bootstrap-grid.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css" />
+        <link href="assets/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
         <link href="assets/css/style.css" rel="stylesheet" type="text/css" />
     </head>
     <body>
@@ -43,6 +44,7 @@ session_start();
     // Objects
     require_once MODEL_DIR.'Image.php';
     require_once MODEL_DIR.'User.php';
+    require_once MODEL_DIR.'Album.php';
 
     // Classes utilitaires
     require_once UTIL_DIR.'Util.php';
@@ -50,6 +52,7 @@ session_start();
 
     // DAO
     require_once DAO_DIR.'Database.php';
+    require_once DAO_DIR.'AlbumDAO.php';
     require_once DAO_DIR.'ImageDAO.php';
     require_once DAO_DIR.'UserDAO.php';
 
@@ -59,6 +62,7 @@ session_start();
     // Controllers
     require_once CONTROLLER_DIR.'AboutController.php';
     require_once CONTROLLER_DIR.'AdminController.php';
+    require_once CONTROLLER_DIR.'AlbumController.php';
     require_once CONTROLLER_DIR.'IndexController.php';
     require_once CONTROLLER_DIR.'ImageController.php';
     require_once CONTROLLER_DIR.'TestController.php';
