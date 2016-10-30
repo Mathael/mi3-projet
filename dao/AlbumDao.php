@@ -5,7 +5,7 @@
  * Date: 28/10/2016
  * Time: 20:37
  */
-class AlbumDao
+final class AlbumDao
 {
     /**
      * @param array $params
@@ -172,13 +172,13 @@ class AlbumDao
     }
 
     public static function getLastIndex($album, $image) {
-        $stmt = Database::getInstance()->prepare('SELECT index FROM album_images WHERE album = :album AND image = :image ORDER BY index DESC LIMIT 1');
+        $stmt = Database::getInstance()->prepare('SELECT image_index FROM album_images WHERE album = :album AND image = :image ORDER BY image_index DESC LIMIT 1');
         $stmt->bindValue('album', $album);
         $stmt->bindValue('image', $image);
         $stmt->execute();
 
         if($result = $stmt->fetch())
-            return $result['index'];
+            return $result['image_index'];
         return 0;
     }
 }
