@@ -10,6 +10,8 @@
  */
 class TemplateManager
 {
+    private $filename;
+    private $directory;
     private $file;
 
     /**
@@ -17,9 +19,91 @@ class TemplateManager
      * Si le paramètre n'est pas donné,
      * @param $file string : file name from the VIEW DIRECTORY
      */
-    function __construct($file = '') {
-        $this->setFile($this->getContent($file));
+    function __construct($file) {
+        $path = explode('/', $file);
+        $name = array_pop($path);
+        $path = implode($path);
+
+        $this
+            ->setFilename($name)
+            ->setDirectory($path)
+            ->setFile($this->getContent($file));
     }
+
+    ////////////////////////////////////////////////
+
+    // Ne supporte pas les tableaux de valeurs [1, 2, 3, 4, 5, 6] or ['key' => 1, ...]
+    public function assignAlpha($key, $something) {
+        $result = '';
+
+        if(!is_array($something))
+        {
+            if(is_object($something)) {
+                // Exemple : assignAlpha('image' => $image);
+                $result = $this->assignObjectAlpha($something);
+            } else {
+                // Exemple : assignAlpha('id' => 123);
+                $result = $something;
+            }
+        }
+        else
+        {
+            // Exemple : assignAlpha([Image, Image, Imagen ...]);
+            foreach ($something as $object) {
+                $result .= $this->assignObjectAlpha($object);
+            }
+        }
+
+        $this->assign($key, $result);
+    }
+
+    private function assignObjectAlpha($object)
+    {
+        $result = $this->getContent($this->getDirectory().'/'.$this->getFilename().'_small');
+        $result = $this->resolveObject($object, $result);
+        return $result;
+    }
+
+    private function resolveObject($object, $result, $path = '')
+    {
+        // La réflection permet d'accéder aux informations d'une class.
+        // Dans notre cas, on s'intéresse aux attributs privés (sans Reflection, il faudrait les passer en public)
+        $reflect = new ReflectionClass($object);
+        $props = $reflect->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
+
+        // Pour chaque objet, accède à ses attributs pour repérer les clé valeurs à modifier dans le HTML
+        foreach ($props as $attr)
+        {
+            $method = 'get'.ucfirst($attr->getName());
+
+            // Gestion des atributs de type tableaux d'objets
+            // Ex: $user->getName() ne retourne pas un tableau
+            // Ex: $album->getImages() retourne un tableau
+            if(is_array($object->$method()))
+            {
+                foreach ($object->$method() as $key => $elem)
+                {
+                    if(is_object($elem))
+                    {
+                        $path .= get_class($object) . '.';
+                        return $this->resolveObject($elem, $result, $path);
+                    } else {
+                        $result = str_replace($key, $elem, $result);
+                    }
+                }
+            }
+            else
+            {
+                // Décommenter la ligne ci-dessous pour voir la convention de nommage.
+                //echo $path.get_class($object).'.'.$attr->getName().'<br/>';
+                $result = str_replace('{{'.$path.get_class($object).'.'.$attr->getName().'}}', $object->$method(), $result);
+            }
+        }
+
+        return $result;
+    }
+
+    ////////////////////////////////////////////////
 
     /**
      * @param $key string : chaine de caractères présente dans le HTML sous forme {{valeur}}
@@ -149,6 +233,42 @@ class TemplateManager
     private function setFile($file)
     {
         $this->file = $file;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFilename()
+    {
+        return $this->filename;
+    }
+
+    /**
+     * @param mixed $filename
+     * @return TemplateManager
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDirectory()
+    {
+        return $this->directory;
+    }
+
+    /**
+     * @param mixed $directory
+     * @return TemplateManager
+     */
+    public function setDirectory($directory)
+    {
+        $this->directory = $directory;
         return $this;
     }
 }
