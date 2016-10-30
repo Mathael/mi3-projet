@@ -23,10 +23,10 @@ final class AlbumController implements DefaultController
 
         if($albums != null)
         {
-            $template->assignArrayObjects('albums', 'album/index_small', $albums);
+            $template->assignAlpha('albums', $albums);
         }
 
-        $template->assign('albums', ''); // TODO: somethings to clean
+        $template->assign('albums', 'Vous n\'avez pas d\'albums !');
         $template->show();
     }
 
@@ -54,18 +54,26 @@ final class AlbumController implements DefaultController
             return;
         }
 
-        $album = AlbumDao::findByIdAndOwnerId($_SESSION['user_id']);
-        var_dump($album);
-
         $template = new TemplateManager('album/show');
+        $album = AlbumDao::findByIdAndOwnerId($_SESSION['user_id']);
 
+        if($album != null)
+        {
+            $template->assignAlpha('name', $album->getName());
+            $template->assignAlpha('images', $album->getImages());
+        }
+
+        $template->assign('album', 'Vous n\'avez pas d\'albums !');
         $template->show();
     }
 
     public static function addImageAction() {
         $image = Util::getValue($_POST, 'image', null);
         $album = Util::getValue($_POST, 'album', null);
-        if($image == null || $album == null) return;
+        if($image == null || $album == null){
+            self::indexAction();
+            return;
+        }
 
         $lastIndex = AlbumDao::getLastIndex($album, $image);
 
