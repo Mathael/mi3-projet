@@ -66,6 +66,31 @@ class AlbumDao
     }
 
     /**
+     * @return Album[]|null
+     */
+    public static function findAllByOwnerId($id)
+    {
+        /** @var Album[] $albums */
+
+        $stmt = Database::getInstance()->prepare('SELECT * FROM album WHERE owner = :owner');
+        $stmt->bindValue('owner', $id);
+        $stmt->execute();
+
+        $albums = $stmt->fetchAll(PDO::FETCH_CLASS, 'Album');
+
+        if($albums == null || empty($albums)) return null;
+
+
+        foreach ($albums as $album)
+        {
+            $images = self::getAlbumImages($album->getId());
+            if($images != null) $album->setImages($images);
+        }
+
+        return $albums;
+    }
+
+    /**
      * @param int $id
      * @return Album|null
      */
@@ -75,6 +100,33 @@ class AlbumDao
 
         $stmt = Database::getInstance()->prepare('SELECT * FROM album WHERE id = :id');
         $stmt->bindValue('id', $id);
+        $stmt->execute();
+
+        if($res = $stmt->fetch()) {
+            $album = new Album($res);
+        }
+
+        if($album == null) return null;
+
+        $images = self::getAlbumImages($album->getId());
+
+        if($images != null)
+            $album->setImages($images);
+
+        return $album;
+    }
+
+    /**
+     * @param int $id
+     * @return Album|null
+     */
+    public static function findByIdAndOwnerId($id)
+    {
+        $album = NULL;
+
+        $stmt = Database::getInstance()->prepare('SELECT * FROM album WHERE id = :id AND owner = :owner');
+        $stmt->bindValue('id', $id);
+        $stmt->bindValue('owner', $_SESSION['user_id']);
         $stmt->execute();
 
         if($res = $stmt->fetch()) {
@@ -117,5 +169,16 @@ class AlbumDao
         $stmt->bindValue('album', $albumId);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_CLASS, 'Image');
+    }
+
+    public static function getLastIndex($album, $image) {
+        $stmt = Database::getInstance()->prepare('SELECT index FROM album_images WHERE album = :album AND image = :image ORDER BY index DESC LIMIT 1');
+        $stmt->bindValue('album', $album);
+        $stmt->bindValue('image', $image);
+        $stmt->execute();
+
+        if($result = $stmt->fetch())
+            return $result['index'];
+        return 0;
     }
 }
