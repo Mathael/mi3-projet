@@ -1,5 +1,11 @@
 <?php
 
+namespace App\controllers;
+use App\model\Album;
+use App\dao\AlbumDao;
+use App\utils\TemplateManager;
+use App\utils\Util;
+
 /**
  * @author LEBOC Philippe.
  * Date: 28/10/2016

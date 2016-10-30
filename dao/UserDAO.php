@@ -61,7 +61,7 @@ final class UserDAO
         $stmt = Database::getInstance()->prepare("SELECT * FROM user");
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'User');
+        return $stmt->fetchAll(PDO::FETCH_CLASS, User::class);
     }
 
     /**

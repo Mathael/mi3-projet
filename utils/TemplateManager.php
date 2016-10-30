@@ -90,7 +90,8 @@ class TemplateManager
                 {
                     if(is_object($elem))
                     {
-                        $path .= get_class($object) . '.';
+                        $classname = (new ReflectionClass($object))->getShortName();
+                        $path .= $classname . '.';
                         return $this->resolveObject($elem, $result, $path);
                     } else {
                         $result = str_replace($key, $elem, $result);
@@ -101,7 +102,8 @@ class TemplateManager
             {
                 // Décommenter la ligne ci-dessous pour voir la convention de nommage.
                 //echo $path.get_class($object).'.'.$attr->getName().'<br/>';
-                $result = str_replace('{{'.$path.get_class($object).'.'.$attr->getName().'}}', $object->$method(), $result);
+                $classname = (new ReflectionClass($object))->getShortName();
+                $result = str_replace('{{'.$path.$classname.'.'.$attr->getName().'}}', $object->$method(), $result);
             }
         }
 
@@ -165,7 +167,8 @@ class TemplateManager
         // Pour chaque objet, accède à ses attributs pour repérer les clé valeurs à modifier dans le HTML
         foreach ($props as $attr) {
             $method = 'get'.ucfirst($attr->getName());
-            $this->setFile(str_replace('{{'.get_class($object).'.'.$attr->getName().'}}', $object->$method(), $this->getFile()));
+            $classname = (new ReflectionClass($object))->getShortName();
+            $this->setFile(str_replace('{{'.$classname.'.'.$attr->getName().'}}', $object->$method(), $this->getFile()));
         }
     }
 
@@ -189,7 +192,8 @@ class TemplateManager
             // Pour chaque objet, accède à ses attributs pour repérer les clé valeurs à modifier dans le HTML
             foreach ($props as $attr) {
                 $method = 'get'.ucfirst($attr->getName());
-                $result = str_replace('{{'.get_class($object).'.'.$attr->getName().'}}', $object->$method(), $result);
+                $classname = (new ReflectionClass($object))->getShortName();
+                $result = str_replace('{{'.$classname.'.'.$attr->getName().'}}', $object->$method(), $result);
             }
         }
 

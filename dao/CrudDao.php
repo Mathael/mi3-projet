@@ -1,5 +1,7 @@
 <?php
 
+namespace App\dao;
+
 /**
  * @author LEBOC Philippe.
  * Date: 28/10/2016

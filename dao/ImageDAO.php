@@ -57,7 +57,7 @@ final class ImageDAO {
         $stmt = Database::getInstance()->prepare('SELECT * FROM image');
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, "Image");
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
     }
 
     /**
@@ -166,7 +166,7 @@ final class ImageDAO {
         $stmt = Database::getInstance()->prepare($statement);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, "Image");
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
     }
 
     public static function getCategories() {

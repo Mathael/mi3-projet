@@ -1,5 +1,7 @@
 <?php
 
+namespace App\model;
+
 /**
  * @author LEBOC Philippe.
  * Date: 28/10/2016

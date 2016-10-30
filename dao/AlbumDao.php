@@ -1,5 +1,11 @@
 <?php
 
+namespace App\dao;
+use App\model\Album;
+use App\model\Image;
+use App\utils\Util;
+use PDO;
+
 /**
  * @author LEBOC Philippe.
  * Date: 28/10/2016
@@ -51,7 +57,7 @@ final class AlbumDao
         $stmt = Database::getInstance()->prepare('SELECT * FROM album');
         $stmt->execute();
 
-        $albums = $stmt->fetchAll(PDO::FETCH_CLASS, 'Album');
+        $albums = $stmt->fetchAll(PDO::FETCH_CLASS, Album::class);
 
         if($albums == null || empty($albums)) return null;
 
@@ -76,7 +82,7 @@ final class AlbumDao
         $stmt->bindValue('owner', $id);
         $stmt->execute();
 
-        $albums = $stmt->fetchAll(PDO::FETCH_CLASS, 'Album');
+        $albums = $stmt->fetchAll(PDO::FETCH_CLASS, Album::class);
 
         if($albums == null || empty($albums)) return null;
 
@@ -168,7 +174,7 @@ final class AlbumDao
         $stmt = Database::getInstance()->prepare('SELECT i.id, i.url, i.category, i.comment FROM image i, album_images a WHERE a.album = :album AND a.image = i.id');
         $stmt->bindValue('album', $albumId);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_CLASS, 'Image');
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
     }
 
     public static function getLastIndex($album, $image) {
