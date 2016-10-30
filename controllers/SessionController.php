@@ -50,6 +50,7 @@ final class SessionController implements DefaultController
         // Actuellement, seul l'admin se connecte donc tous les comptes sont admin.
         $_SESSION['ROLE'] = $user->getRole();
         $_SESSION['USERNAME'] = $user->getUsername();
+        $_SESSION['user_id'] = $user->getId();
 
         // Redirige vers la page d'index
         // TODO: notifier l'utilisateur qu'il est bien connecté
@@ -106,6 +107,7 @@ final class SessionController implements DefaultController
         session_reset();
         $_SESSION['ROLE'] = $user->getRole();
         $_SESSION['USERNAME'] = $user->getUsername();
+        $_SESSION['user_id'] = $user->getId();
 
         // Retour à l'index
         IndexController::indexAction();

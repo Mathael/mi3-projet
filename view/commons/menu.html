@@ -7,8 +7,12 @@
             <a class="nav-link" href="?page=image">Photos</a>
         </li>
         <?php use App\model\User;
-
-        if(isset($menu) && !empty($menu)) {
+        
+        if(!empty($_SESSION['ROLE'])) { ?>
+        <li class="nav-item">
+            <a class="nav-link" href="?page=album">Albums</a>
+        </li>
+        <?php } if(isset($menu) && !empty($menu)) {
             foreach($menu as $key => $value) {
                 echo '<li class="nav-item"><a class="nav-link" href=\''.$value.'\'>'. $key .'</a></li>';
             }
@@ -36,7 +40,7 @@
     <?php } else { ?>
         <?php if($_SESSION['ROLE'] == User::$ROLE_ADMIN) { ?>
         <li class="nav-item">
-            <a class="nav-link" href="?page=admin">Administration</a>
+            <a class="nav-link" href="?page=admin"><i class="fa fa-cog" aria-hidden="true"></i> Administration</a>
         </li>
         <?php } ?>
         <li class="nav-item">
