@@ -2,6 +2,7 @@
 
 namespace App\controllers;
 
+use App\dao\Database;
 use App\dao\ImageDAO;
 use App\utils\TemplateManager;
 
@@ -63,5 +64,9 @@ final class TestController implements DefaultController {
      */
     public static function seeAction() {
         echo 'SEE CALLED !';
+    }
+
+    public static function connectionClose() {
+        Database::close();
     }
 }
