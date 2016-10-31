@@ -20,7 +20,7 @@
     <h1>Modification des informations de l'image</h1>
     <h3>Image ID : {{Image.id}}</h3>
     <figure>
-        <img src="http://localhost/tp1/assets/images/{{Image.url}}" alt="Erreur de chargement de l'image" />
+        <img src="{{app_assets}}images/{{Image.url}}" alt="Erreur de chargement de l'image" />
     </figure>
     <form method="POST" action="?page=admin&action=editImage&imageId={{Image.id}}">
         <input type="text" name="comment" value="{{Image.comment}}" placeholder="{{Image.comment}}" required />

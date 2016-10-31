@@ -40,8 +40,6 @@ session_start();
     // Définitions de constantes
     define('DS', DIRECTORY_SEPARATOR); // Séparateur de fichier définit pas l'installation PHP donc variera en fonction de l'OS installé.
     define('PROJECT_DIR', dirname(__FILE__).DS);
-    // define('PROJECT_DIR', realpath('./')); une autre façon de faire la même chose
-    define('FRONT_CONTROLLER', 'Yes I\'m coming from front controller !');
     define('CONTROLLER_DIR', PROJECT_DIR.'controllers'.DS);
     define('MODEL_DIR', PROJECT_DIR.'model'.DS);
     define('DAO_DIR', PROJECT_DIR.'dao'.DS);
@@ -76,7 +74,7 @@ session_start();
         $action = 'indexAction';
     }
 
-    // function PHP permettant de lancer un appel de d'une fonction d'une class.
+    // function PHP permettant de lancer un appel de fonction d'une class.
     // en paramètre :
     // - Tableau contenant la classe et la fonction à executer
     // - Second paramètre optionnel : les paramètres de la fonction à executer
