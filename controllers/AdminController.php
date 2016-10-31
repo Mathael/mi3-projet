@@ -75,7 +75,7 @@ final class AdminController implements DefaultController {
             return;
         }
 
-        $image = ImageDAO::getImage($imgId);
+        $image = ImageDAO::findById($imgId);
         if($image == null) {
             // TODO: do somethings
             ImageController::indexAction();
@@ -123,7 +123,11 @@ final class AdminController implements DefaultController {
                 $comment = Util::getValue($_POST, 'comment', null);
 
                 if($category != null && $comment != null)
-                    ImageDAO::create($file['name'], $category, $comment);
+                    ImageDAO::create([
+                        'url' => $file['name'],
+                        'catgory' => $category,
+                        'comment' => $comment
+                    ]);
             }
         }
 

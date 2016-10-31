@@ -12,6 +12,6 @@ interface CrudDao
     public static function create($params);
     public static function findAll();
     public static function findById($id);
-    public static function update($params);
+    public static function size();
     public static function delete($id);
 }

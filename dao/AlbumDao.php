@@ -11,7 +11,7 @@ use PDO;
  * Date: 28/10/2016
  * Time: 20:37
  */
-final class AlbumDao
+final class AlbumDao implements CrudDao
 {
     /**
      * @param array $params
@@ -149,11 +149,6 @@ final class AlbumDao
         return $album;
     }
 
-    public static function update($params)
-    {
-        // TODO: Implement update() method.
-    }
-
     /**
      * @param int $id
      * @return bool
@@ -186,5 +181,18 @@ final class AlbumDao
         if($result = $stmt->fetch())
             return $result['image_index'];
         return 0;
+    }
+
+    /**
+     * Récupère le nombre d'albums présents dans la base de données
+     * @return int
+     */
+    public static function size()
+    {
+        $stmt = Database::getInstance()->prepare('SELECT count(*) as cnt FROM album');
+        $stmt->execute();
+
+        $row = $stmt->fetch();
+        return $row['cnt'];
     }
 }

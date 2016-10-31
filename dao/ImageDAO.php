@@ -11,14 +11,14 @@ use PDO;
  *
  * Class ImageDAO
  */
-final class ImageDAO {
+final class ImageDAO implements CrudDao {
 
     /**
      * Retourne un objet Image en fonction de son id
      * @param $id integer
      * @return Image|null
      */
-    public static function getImage($id) {
+    public static function findById($id) {
         $image = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
         $stmt->bindValue('id', $id);
@@ -113,7 +113,7 @@ final class ImageDAO {
      * Retourne le nombre d'images présentes dans la table image
      * @return Integer
      */
-    public static function getImageCount() {
+    public static function size() {
         $stmt = Database::getInstance()->prepare('SELECT count(*) as cnt FROM image');
         $stmt->execute();
 
@@ -126,7 +126,7 @@ final class ImageDAO {
      * @return Image|null
      */
     public static function getRandomImage() {
-        $count = self::getImageCount();
+        $count = self::size();
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
         $stmt->bindValue('id', rand(1, $count));
         $stmt->execute();
@@ -150,7 +150,7 @@ final class ImageDAO {
         }
 
         $ids = [];
-        $max = self::getImageCount();
+        $max = self::size();
         for($i = 0; $i < $displayCnt ; $i++) {
             $ids[] = rand(1, $max);
         }
@@ -202,16 +202,24 @@ final class ImageDAO {
     }
 
     /**
-     * @param $url
-     * @param $category
-     * @param $comment
+     * @param $params []
      * @return bool
      */
-    public static function create($url, $category, $comment) {
+    public static function create($params) {
         $stmt = Database::getInstance()->prepare('INSERT INTO image(url, category, comment) VALUES (:url, :category, :comment)');
-        $stmt->bindValue('url', $url);
-        $stmt->bindValue('category', $category);
-        $stmt->bindValue('comment', $comment);
+        $stmt->bindValue('url', $params['url']);
+        $stmt->bindValue('category', $params['category']);
+        $stmt->bindValue('comment', $params['comment']);
         return $stmt->execute();
+    }
+
+    /**
+     * @return Image[]
+     */
+    public static function findAll()
+    {
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
     }
 }
