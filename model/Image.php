@@ -2,6 +2,12 @@
 
 namespace App\model;
 
+/**
+ * Class Image
+ * @package App\model
+ *
+ * Représente une image et ses informations.
+ */
 class Image {
 
     private $id;
@@ -55,7 +61,7 @@ class Image {
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getCategory()
     {

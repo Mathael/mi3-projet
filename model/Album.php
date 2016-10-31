@@ -6,6 +6,11 @@ namespace App\model;
  * @author LEBOC Philippe.
  * Date: 28/10/2016
  * Time: 20:23
+ *
+ * Class Album
+ * @package App\model
+ *
+ * Représente un album
  */
 class Album
 {

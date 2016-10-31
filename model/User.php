@@ -7,7 +7,10 @@ namespace App\model;
  * Date: 20/10/2016
  * Time: 10:44
  *
- * Cette classe permet la représentation modèle d'un utilisateur connecté (session) au site.
+ * Class User
+ * @package App\model
+ *
+ * Représente un utilisateur connecté (session) au site.
  */
 class User
 {

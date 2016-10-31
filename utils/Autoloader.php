@@ -8,6 +8,9 @@ namespace App\utils;
  * Time: 22:52
  *
  * @Link http://php.net/manual/fr/function.spl-autoload-register.php
+ *
+ * Class Autoloader
+ * @package App\utils
  */
 class Autoloader
 {
