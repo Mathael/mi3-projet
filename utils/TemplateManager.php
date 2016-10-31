@@ -2,6 +2,7 @@
 
 namespace App\utils;
 
+use App\config\Config;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -53,7 +54,7 @@ class TemplateManager
         }
         else
         {
-            // Exemple : assignAlpha([Image, Image, Imagen ...]);
+            // Exemple : assignAlpha([Image, Image, Image ...]);
             foreach ($something as $object) {
                 $result .= $this->assignObjectAlpha($object);
             }
@@ -201,6 +202,17 @@ class TemplateManager
     }
 
     /**
+     * Effectue les affectations de variables automatiques (en fonction des configurations)
+     *
+     * {{app_url}}      = http://url/
+     * {{app_assets}}   = http://url/assets/
+     */
+    public function cleanup() {
+        $this->setFile(str_replace('{{app_url}}', Config::APP_URL, $this->getFile()));
+        $this->setFile(str_replace('{{app_assets}}', Config::APP_URL.Config::APP_DIRECTORY.DS.'assets'.DS, $this->getFile()));
+    }
+
+    /**
      * Ajoute le contenu d'une page HTML dans la variable $file
      * @param $html
      * @return $this
@@ -214,6 +226,7 @@ class TemplateManager
      * Affiche le contenu présent dans $file
      */
     public function show() {
+        $this->cleanup();
         echo $this->getFile();
     }
 
