@@ -39,8 +39,8 @@ final class SessionController implements DefaultController
         }
 
         // Récupération de l'utilisateur correspondant et vérifie qu'il existe
-        $user = UserDAO::getUser($username, $password);
-        if($user == null) {
+        $dbuser = UserDAO::getUser($username, $password);
+        if($dbuser == null) {
             return; // TODO: error page
         }
 
@@ -48,9 +48,10 @@ final class SessionController implements DefaultController
         session_reset();
 
         // Actuellement, seul l'admin se connecte donc tous les comptes sont admin.
-        $_SESSION['ROLE'] = $user->getRole();
-        $_SESSION['USERNAME'] = $user->getUsername();
-        $_SESSION['user_id'] = $user->getId();
+        $_SESSION['authenticated'] = true;
+        $_SESSION['user_role'] = $dbuser->getRole();
+        $_SESSION['user_username'] = $dbuser->getUsername();
+        $_SESSION['user_id'] = $dbuser->getId();
 
         // Redirige vers la page d'index
         // TODO: notifier l'utilisateur qu'il est bien connecté
@@ -101,7 +102,7 @@ final class SessionController implements DefaultController
         $user = UserDAO::create([
             'username' => $username,
             'password' => $password,
-            'role' => User::$ROLE_USER
+            'role' => User::ROLE_USER
         ]);
 
         if($user == null) {
@@ -110,8 +111,9 @@ final class SessionController implements DefaultController
         }
 
         session_reset();
-        $_SESSION['ROLE'] = $user->getRole();
-        $_SESSION['USERNAME'] = $user->getUsername();
+        $_SESSION['authenticated'] = true;
+        $_SESSION['user_role'] = $user->getRole();
+        $_SESSION['user_username'] = $user->getUsername();
         $_SESSION['user_id'] = $user->getId();
 
         // Retour à l'index

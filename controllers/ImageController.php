@@ -10,6 +10,8 @@ use App\utils\Util;
 final class ImageController implements DefaultController {
 
     public static function indexAction($params = []) {
+        global $user;
+
         $size = 480; // Default size
         $size *= Util::getValue($params, 'size', 1);
         $id = Util::getValue($params, 'id', 1);
@@ -32,7 +34,7 @@ final class ImageController implements DefaultController {
         $template = new TemplateManager('image/image');
 
         // Les admins peuvent voir des boutons supplémentaires sur la page
-        if($_SESSION['ROLE'] == User::$ROLE_ADMIN)
+        if($user->getRole() == User::ROLE_ADMIN)
             $template->assignArrayObjects('images', 'image/image_small_admin', $images);
         else
            $template->assignArrayObjects('images', 'image/image_small', $images);
@@ -43,6 +45,8 @@ final class ImageController implements DefaultController {
     }
 
     public static function randomAction($params = []) {
+        global $user;
+
         $size = 480; // Default size
         $size *= Util::getValue($params, 'size', 1);
         $display = Util::getValue($params, 'display', 1);
@@ -65,7 +69,7 @@ final class ImageController implements DefaultController {
         $template = new TemplateManager('image/image');
 
         // Les admins peuvent voir des boutons supplémentaires sur la page
-        if($_SESSION['ROLE'] == User::$ROLE_ADMIN)
+        if($user->getRole() == User::ROLE_ADMIN)
             $template->assignArrayObjects('images', 'image/image_small_admin', $images);
         else
             $template->assignArrayObjects('images', 'image/image_small', $images);

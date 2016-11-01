@@ -16,7 +16,8 @@ final class AdminController implements DefaultController {
      * http://my-url/?page=admin
      */
     public static function indexAction() {
-        if($_SESSION['ROLE'] != User::$ROLE_ADMIN) {
+        global $user;
+        if($user->getRole() != User::ROLE_ADMIN) {
             IndexController::indexAction();
             return;
         }
@@ -29,7 +30,8 @@ final class AdminController implements DefaultController {
      * http://my-url/?page=admin&action=addImage
      */
     public static function addImageAction() {
-        if($_SESSION['ROLE'] != User::$ROLE_ADMIN) {
+        global $user;
+        if($user->getRole() != User::ROLE_ADMIN) {
             IndexController::indexAction();
             return;
         }
@@ -39,7 +41,8 @@ final class AdminController implements DefaultController {
      * http://my-url/?page=admin&action=removeImage
      */
     public static function removeImageAction() {
-        if($_SESSION['ROLE'] != User::$ROLE_ADMIN) {
+        global $user;
+        if($user->getRole() != User::ROLE_ADMIN) {
             IndexController::indexAction();
             return;
         }
@@ -63,7 +66,8 @@ final class AdminController implements DefaultController {
      * http://my-url/?page=admin&action=editImage
      */
     public static function editImageAction() {
-        if($_SESSION['ROLE'] != User::$ROLE_ADMIN) {
+        global $user;
+        if($user->getRole() != User::ROLE_ADMIN) {
             IndexController::indexAction();
             return;
         }
@@ -110,7 +114,8 @@ final class AdminController implements DefaultController {
      * http://my-url/?page=admin&action=createImageForm
      */
     public static function createImageFormAction() {
-        if($_SESSION['ROLE'] != User::$ROLE_ADMIN) {
+        global $user;
+        if($user->getRole() != User::ROLE_ADMIN) {
             IndexController::indexAction();
             return;
         }

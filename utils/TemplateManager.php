@@ -3,6 +3,7 @@
 namespace App\utils;
 
 use App\config\Config;
+use App\model\User;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -18,7 +19,7 @@ class TemplateManager
 {
     private $filename;
     private $directory;
-    private $file;
+    private $stream;
 
     /**
      * TemplateManager constructor.
@@ -33,7 +34,7 @@ class TemplateManager
         $this
             ->setFilename($name)
             ->setDirectory($path)
-            ->setFile($this->getContent($file));
+            ->setStream($this->getContent($file));
     }
 
     ////////////////////////////////////////////////
@@ -118,11 +119,11 @@ class TemplateManager
      * @param $value string : valeur réelle
      */
     public function assign($key, $value) {
-        if(empty($this->getFile())) {
+        if(empty($this->getStream())) {
             echo ('Fichier HTML non non présent dans le TemplateManager');
         }
 
-        $this->setFile(str_replace('{{'.$key.'}}', $value, $this->getFile()));
+        $this->setStream(str_replace('{{'.$key.'}}', $value, $this->getStream()));
     }
 
     /**
@@ -169,7 +170,7 @@ class TemplateManager
         foreach ($props as $attr) {
             $method = 'get'.ucfirst($attr->getName());
             $classname = (new ReflectionClass($object))->getShortName();
-            $this->setFile(str_replace('{{'.$classname.'.'.$attr->getName().'}}', $object->$method(), $this->getFile()));
+            $this->setStream(str_replace('{{'.$classname.'.'.$attr->getName().'}}', $object->$method(), $this->getStream()));
         }
     }
 
@@ -208,8 +209,8 @@ class TemplateManager
      * {{app_assets}}   = http://url/assets/
      */
     public function cleanup() {
-        $this->setFile(str_replace('{{app_url}}', Config::APP_URL, $this->getFile()));
-        $this->setFile(str_replace('{{app_assets}}', Config::APP_URL.Config::APP_DIRECTORY.DS.'assets'.DS, $this->getFile()));
+        $this->setStream(str_replace('{{app_url}}', Config::APP_URL, $this->getStream()));
+        $this->setStream(str_replace('{{app_assets}}', Config::APP_URL.Config::APP_DIRECTORY.DS.'assets'.DS, $this->getStream()));
     }
 
     /**
@@ -218,16 +219,47 @@ class TemplateManager
      * @return $this
      */
     public function addTemplateFile($html) {
-        $this->setFile($this->getFile() . $this->getContent($html));
+        $this->setStream($this->getStream() . $this->getContent($html));
         return $this;
     }
 
     /**
-     * Affiche le contenu présent dans $file
+     * Affiche le contenu présent dans $file (flux HTML)
      */
     public function show() {
+        $mainTemplate = $this->getContent('template');
+        $this->setStream(str_replace('{{content}}', $this->getStream(), $mainTemplate));
+        $this->setStream(str_replace('{{#require:commons/menu#}}', $this->getContent('commons/menu'), $this->getStream()));
+        $this->setStream(str_replace('{{#require:commons/footer#}}', $this->getContent('commons/footer'), $this->getStream()));
+        $this->buildMenu();
+
         $this->cleanup();
-        echo $this->getFile();
+        echo $this->getStream();
+    }
+
+    /**
+     * Construction du menu
+     *
+     * Le menu possède des boutons à gauche et à droite.
+     * D'où les variables $left et $right
+     */
+    public function buildMenu() {
+        global $user;
+        $left = '';
+        $right = '';
+
+        if(!empty($_SESSION['authenticated'])) {
+            $left .= '<li class="nav-item"><a class="nav-link" href="?page=album">Albums</a></li>';
+            if($user->getRole() == User::ROLE_ADMIN)
+                $right .= '<li class="nav-item"><a class="nav-link" href="?page=admin"><i class="fa fa-cog" aria-hidden="true"></i> Administration</a></li>';
+            $right .= '<li class="nav-item"><a class="nav-link" href="?page=session&action=logout">Déconnexion ['.$user->getUsername().']</a></li>';
+        } else {
+            $right .= '<li class="nav-item"><a class="nav-link" href="?page=session">Connexion</a></li>';
+            $right .= '<li class="nav-item"><a class="nav-link" href="?page=session&action=registerform">Inscription</a></li>';
+        }
+
+        $this->setStream(str_replace('{{menu_left}}', $left, $this->getStream()));
+        $this->setStream(str_replace('{{menu_right}}', $right, $this->getStream()));
     }
 
     /**
@@ -243,23 +275,23 @@ class TemplateManager
     /**
      * @return string
      */
-    private function getFile()
+    private function getStream()
     {
-        return $this->file;
+        return $this->stream;
     }
 
     /**
      * @param string $file
      * @return TemplateManager
      */
-    private function setFile($file)
+    private function setStream($file)
     {
-        $this->file = $file;
+        $this->stream = $file;
         return $this;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getFilename()
     {
@@ -267,7 +299,7 @@ class TemplateManager
     }
 
     /**
-     * @param mixed $filename
+     * @param string $filename
      * @return TemplateManager
      */
     public function setFilename($filename)
@@ -277,7 +309,7 @@ class TemplateManager
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getDirectory()
     {
@@ -285,7 +317,7 @@ class TemplateManager
     }
 
     /**
-     * @param mixed $directory
+     * @param string $directory
      * @return TemplateManager
      */
     public function setDirectory($directory)

@@ -14,8 +14,9 @@ namespace App\model;
  */
 class User
 {
-    public static $ROLE_ADMIN = 'ADMIN';
-    public static $ROLE_USER = 'USER';
+    const ROLE_ANONYMOUS = 0;
+    const ROLE_USER = 1;
+    const ROLE_ADMIN = 2;
 
     private $id;
     private $username;
@@ -86,7 +87,7 @@ class User
     }
 
     /**
-     * @return string
+     * @return int
      */
     public function getRole()
     {
@@ -94,7 +95,7 @@ class User
     }
 
     /**
-     * @param $role string
+     * @param $role int
      * @return User
      */
     public function setRole($role)

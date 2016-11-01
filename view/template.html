@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Base de données d'images</title>
+        <link href="{{app_assets}}css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{app_assets}}css/bootstrap-flex.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{app_assets}}css/bootstrap-grid.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{app_assets}}css/bootstrap-reboot.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{app_assets}}css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <link href="{{app_assets}}css/style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        {{#require:commons/menu#}}
+        <div class="container">
+            {{content}}
+        </div>
+        {{#require:commons/footer#}}
+        <script src="{{app_assets}}js/jquery-3.1.1.min.js" type="text/javascript"></script>
+        <script src="{{app_assets}}js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="{{app_assets}}js/default.js" type="text/javascript"></script>
+    </body>
+</html>
