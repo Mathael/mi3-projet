@@ -214,4 +214,16 @@ final class ImageDAO {
         $stmt->bindValue('comment', $comment);
         return $stmt->execute();
     }
+
+    public static function getImageByCategorie($category){
+        $table = [];
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE category=:category');
+        $stmt->bindValue('category', $category);
+        $stmt->execute();
+
+        while($result = $stmt->fetch()) {
+            $table[] = new Image($result);
+        }
+        return $table;
+    }
 }

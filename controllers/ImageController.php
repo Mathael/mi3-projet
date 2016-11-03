@@ -28,6 +28,9 @@ final class ImageController implements DefaultController {
         // Ajout des boutons au menu
         $menu = self::buildMenu($params);
 
+        //Ajout de la lite des category
+        $option = self::buildCategory();
+
         // Appel de la vue associée à l'action
         $template = new TemplateManager('image/image');
 
@@ -39,6 +42,7 @@ final class ImageController implements DefaultController {
 
         $template->assign('size', $size);
         $template->assignArray($menu);
+        $template->assign('options',$option);
         $template->show();
     }
 
@@ -61,6 +65,9 @@ final class ImageController implements DefaultController {
         // Ajout des boutons au menu
         $menu = self::buildMenu($params);
 
+        //Ajout de la lite des category
+        $option = self::buildCategory();
+
         // Appel de la vue associée à l'action
         $template = new TemplateManager('image/image');
 
@@ -72,6 +79,7 @@ final class ImageController implements DefaultController {
 
         $template->assign('size', $size);
         $template->assignArray($menu);
+        $template->assign('options',$option);
         $template->show();
     }
 
@@ -93,5 +101,48 @@ final class ImageController implements DefaultController {
             'zoom +' => '?page=image&id='.$imgId.'&size='.($size+0.25).'&display='.$display,
             'zoom -' => '?page=image&id='.$imgId.'&size='.($size-.25).'&display='.$display
         ];
+    }
+
+    /**
+     * Construction du formulaire listant les différentes catégories d'images
+     * @return string
+     */
+    private static function buildCategory(){
+        $categories  = ImageDAO::getCategories();
+        $options = '';
+
+        foreach ($categories as $category){
+            $options .= '<option value="'.$category.'">'.$category.'</option>';
+        }
+        return $options;
+    }
+
+    public static function categoryAction($params = []){
+
+        $category = $_POST['category'];
+
+        $images = ImageDAO::getImageByCategorie($category);
+
+        //Ajout de la lite des category
+        $option = self::buildCategory();
+
+        // Appel de la vue associée à l'action
+        $template = new TemplateManager('image/image');
+
+        // Ajout des boutons au menu
+        $menu = self::buildMenu($params);
+
+        // Appel des images
+        if($_SESSION['ROLE'] == User::$ROLE_ADMIN)
+            $template->assignArrayObjects('images', 'image/image_small', $images);
+        else
+            $template->assignArrayObjects('images', 'image/image_small_admin', $images);
+
+        //Ajout des images de la catégorie
+        $template->assignArrayObjects('images', 'image/image_small', $images);
+        $template->assign('options',$option);
+        $template->assignArray($menu);
+        $template->show();
+
     }
 }
