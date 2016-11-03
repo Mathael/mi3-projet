@@ -23,10 +23,16 @@ class TemplateManager
 
     /**
      * TemplateManager constructor.
-     * Si le paramètre n'est pas donné,
-     * @param $file string : file name from the VIEW DIRECTORY
+     * Il est obligatoire d'appeler init($file)
      */
-    function __construct($file) {
+    function __construct() {}
+
+    /**
+     * ATTENTION : OBLIGATOIRE !
+     *
+     * @param $file string le fichier principal à charger.
+     */
+    public function init($file) {
         $path = explode('/', $file);
         $name = array_pop($path);
         $path = implode($path);

@@ -1,11 +1,10 @@
 <?php
 namespace App\controllers;
 
-use App\utils\TemplateManager;
+use App\utils\Response;
 
 final class AboutController implements DefaultController {
     public static function indexAction() {
-        $template = new TemplateManager('about');
-        $template->show();
+        return new Response('about');
     }
 }

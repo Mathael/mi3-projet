@@ -1,0 +1,20 @@
+<style>
+    li {display: inline-block; text-decoration: none;}
+</style>
+<section>
+    <ul>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=previous&id={{id}}&display={{display}}">Précédant</a></li>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=next&id={{id}}&display={{display}}">Suivant</a></li>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=first">Première image</a></li>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=random">Aléatoire</a></li>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=more&id={{id}}&display={{display}}">Plus d'images</a></li>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=less&id={{id}}&display={{display}}">Moins d'images</a></li>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=zoomin">Zoom +</a></li>
+        <li><a class="btn btn-sm btn-primary" href="?page=image&action=zoomout">Zoom -</a></li>
+    </ul>
+</section>
+<section>
+    <div class="card-deck">
+        {{images}}
+    </div>
+</section>

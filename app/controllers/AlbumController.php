@@ -1,9 +1,9 @@
 <?php
 
 namespace App\controllers;
-use App\model\Album;
 use App\dao\AlbumDao;
-use App\utils\TemplateManager;
+use App\model\User;
+use App\utils\Response;
 use App\utils\Util;
 
 /**
@@ -24,69 +24,70 @@ final class AlbumController implements DefaultController
      */
     public static function indexAction()
     {
-        $template = new TemplateManager('album/index');
-        $albums = AlbumDao::findAllByOwnerId($_SESSION['user_id']);
+        global $user;
+        if($user->getRole() == User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
+        $response = new Response('album/index');
+        $albums = AlbumDao::findAllByOwnerId($user->getId());
 
         if($albums != null)
         {
-            $template->assignAlpha('albums', $albums);
+            $response->getTemplate()->assignAlpha('albums', $albums);
         }
 
-        $template->assign('albums', 'Vous n\'avez pas d\'albums !');
-        $template->show();
+        $response->getTemplate()->assignAlpha('albums', 'Vous n\'avez pas d\'albums !');
+        return $response;
     }
 
     public static function createAction() {
+        global $user;
         $name = Util::getValue($_POST, 'name', null);
 
         if(!empty($name)) {
             AlbumDao::create([
                 'name' => $name,
-                'ownerId' => $_SESSION['user_id']
+                'ownerId' => $user->getId()
             ]);
-            self::indexAction();
-            return;
+            return self::indexAction();
         }
 
-        $template = new TemplateManager('album/create_form');
-        $template->show();
+        return new Response('album/create_form');
     }
 
     public static function showAction() {
         $id = Util::getValue($_GET, 'id', null);
         if($id == null)
         {
-            self::indexAction();
-            return;
+            return self::indexAction();
         }
 
-        $template = new TemplateManager('album/show');
+        $response = new Response('album/show');
         $album = AlbumDao::findByIdAndOwnerId($_SESSION['user_id']);
 
         if($album != null)
         {
-            $template->assignAlpha('name', $album->getName());
-            $template->assignAlpha('images', $album->getImages());
+            $response->getTemplate()->assignAlpha('name', $album->getName());
+            $response->getTemplate()->assignAlpha('images', $album->getImages());
         }
 
-        $template->assign('album', 'Vous n\'avez pas d\'albums !');
-        $template->show();
+        $response->getTemplate()->assign('album', 'Vous n\'avez pas d\'albums !');
+        return $response;
     }
 
     public static function addImageAction() {
         $image = Util::getValue($_POST, 'image', null);
         $album = Util::getValue($_POST, 'album', null);
         if($image == null || $album == null){
-            self::indexAction();
-            return;
+            return self::indexAction();
         }
 
         $lastIndex = AlbumDao::getLastIndex($album, $image);
 
         AlbumDao::insertImage($album, $image, $lastIndex+1);
 
-        ImageController::indexAction();
-        return;
+        return ImageController::indexAction();
     }
 
     public static function addToAlbumAction() {
@@ -96,7 +97,7 @@ final class AlbumController implements DefaultController
         $userId = $_SESSION['user_id'];
         if(!empty($userId))
         {
-            $albums = AlbumDao::findAllByOwnerId($userId); /** @var $albums Album[] */
+            $albums = AlbumDao::findAllByOwnerId($userId);
             if(!empty($albums))
             {
                 $select .= '<select name=\'album\'>';
@@ -108,9 +109,9 @@ final class AlbumController implements DefaultController
             }
         }
 
-        $template = new TemplateManager('album/choose_album');
-        $template->assign('select', $select);
-        $template->assign('image', $image);
-        $template->show();
+        $response = new Response('album/choose_album');
+        $response->getTemplate()->assignAlpha('select', $select);
+        $response->getTemplate()->assignAlpha('image', $image);
+        return $response;
     }
 }

@@ -4,7 +4,7 @@ namespace App\controllers;
 use App\dao\ImageDAO;
 use App\model\Image;
 use App\model\User;
-use App\utils\TemplateManager;
+use App\utils\Response;
 use App\utils\Util;
 
 /**
@@ -18,12 +18,10 @@ final class AdminController implements DefaultController {
     public static function indexAction() {
         global $user;
         if($user->getRole() != User::ROLE_ADMIN) {
-            IndexController::indexAction();
-            return;
+            return IndexController::indexAction();
         }
 
-        $tempalte = new TemplateManager('admin/index');
-        $tempalte->show();
+        return new Response('admin/index');
     }
 
     /**
@@ -32,9 +30,10 @@ final class AdminController implements DefaultController {
     public static function addImageAction() {
         global $user;
         if($user->getRole() != User::ROLE_ADMIN) {
-            IndexController::indexAction();
-            return;
+            return IndexController::indexAction();
         }
+
+        // WHERE IS MY CODE ?? !!!!!!!!
     }
 
     /**
@@ -43,23 +42,21 @@ final class AdminController implements DefaultController {
     public static function removeImageAction() {
         global $user;
         if($user->getRole() != User::ROLE_ADMIN) {
-            IndexController::indexAction();
-            return;
+            return IndexController::indexAction();
         }
 
         $imgId = Util::getValue($_GET, 'imageId', null);
         if($imgId == null) {
             // TODO: do somethings
-            ImageController::indexAction();
-            return;
+            return ImageController::indexAction();
         }
 
         $resultPage = NULL;
         $resultPage = ImageDAO::delete($imgId) ? 'admin/image_remove_success' : 'admin/image_remove_fail';
 
-        $template = new TemplateManager($resultPage);
-        $template->assign('id', $imgId);
-        $template->show();
+        $response = new Response($resultPage);
+        $response->getTemplate()->assignAlpha('id', $imgId);
+        return $response;
     }
 
     /**
@@ -68,32 +65,29 @@ final class AdminController implements DefaultController {
     public static function editImageAction() {
         global $user;
         if($user->getRole() != User::ROLE_ADMIN) {
-            IndexController::indexAction();
-            return;
+            return IndexController::indexAction();
         }
 
         $imgId = Util::getValue($_GET, 'imageId', null);
         if($imgId == null) {
             // TODO: do somethings
-            ImageController::indexAction();
-            return;
+            return ImageController::indexAction();
         }
 
         $image = ImageDAO::findById($imgId);
         if($image == null) {
             // TODO: do somethings
-            ImageController::indexAction();
-            return;
+            return ImageController::indexAction();
         }
 
-        $template = new TemplateManager('admin/image_edit');
+        $response = new Response('admin/image_edit');
 
         if(!empty($_POST))
         {
             $comment = Util::getValue($_POST, 'comment', $image->getComment());
             $category = Util::getValue($_POST, 'category', $image->getCategory());
             if(ImageDAO::edit($imgId, $comment, $category)) {
-                $template->assignTemplate('result', 'admin/image_edit_success');
+                $response->getTemplate()->assignTemplate('result', 'admin/image_edit_success');
                 $image = new Image([
                     'id' => $image->getId(),
                     'comment' => $comment,
@@ -101,13 +95,13 @@ final class AdminController implements DefaultController {
                     'category' => $category
                 ]);
             } else {
-                $template->assignTemplate('result', 'admin/image_edit_fail');
+                $response->getTemplate()->assignTemplate('result', 'admin/image_edit_fail');
             }
         }
 
-        $template->assignObject($image);
-        $template->assign('result', ''); // clean; TODO
-        $template->show();
+        $response->getTemplate()->assignObject($image); // TODO change to assign normal (need refactor template manager)
+        $response->getTemplate()->assignAlpha('result', ''); // clean; TODO
+        return $response;
     }
 
     /**
@@ -116,8 +110,7 @@ final class AdminController implements DefaultController {
     public static function createImageFormAction() {
         global $user;
         if($user->getRole() != User::ROLE_ADMIN) {
-            IndexController::indexAction();
-            return;
+            return IndexController::indexAction();
         }
 
         if(!empty($_FILES['file']) && !empty($_POST))
@@ -138,8 +131,8 @@ final class AdminController implements DefaultController {
 
         $categories = ImageDAO::getCategories();
 
-        $template = new TemplateManager('admin/image_create_form');
-        $template->assignArrayTemplate('categories', 'admin/image_create_form_small', 'category', $categories);
-        $template->show();
+        $response = new Response('admin/image_create_form');
+        $response->getTemplate()->assignArrayTemplate('categories', 'admin/image_create_form_small', 'category', $categories);
+        return $response;
     }
 }

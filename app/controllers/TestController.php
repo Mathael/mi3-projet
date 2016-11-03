@@ -4,7 +4,7 @@ namespace App\controllers;
 
 use App\dao\Database;
 use App\dao\ImageDAO;
-use App\utils\TemplateManager;
+use App\utils\Response;
 
 final class TestController implements DefaultController {
 
@@ -20,6 +20,7 @@ final class TestController implements DefaultController {
      */
     public static function indexAction() {
         // TODO: Implement indexAction() method.
+        return new Response('');
     }
 
     /**
@@ -29,10 +30,10 @@ final class TestController implements DefaultController {
      */
     public static function templateAction() {
         // Test du moteur de template
-        $template = new TemplateManager('tests/test');
-        $template->assign('title', 'ITS WORKS !');
-        $template->assign('content', 'Affichage d\'un contenu aléatoire !');
-        $template->show();
+        $response = new Response('tests/test');
+        $response->getTemplate()->assignAlpha('title', 'ITS WORKS !');
+        $response->getTemplate()->assignAlpha('content', 'Affichage d\'un contenu aléatoire !');
+        return $response;
     }
 
     /**
@@ -44,10 +45,10 @@ final class TestController implements DefaultController {
         $images = ImageDAO::getImageList(10, 5);
 
         // Test du moteur de template avec tableau de paramètres
-        $template = new TemplateManager('tests/test_array');
-        $template->assign('title', 'ITS WORKS !');
-        $template->assignArrayObjects('content', 'tests/test_array_add', $images);
-        $template->show();
+        $response = new Response('tests/test_array');
+        $response->getTemplate()->assignAlpha('title', 'ITS WORKS !');
+        $response->getTemplate()->assignAlpha('content', $images);
+        return $response;
     }
 
     /**

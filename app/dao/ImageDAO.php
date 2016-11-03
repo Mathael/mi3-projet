@@ -94,13 +94,13 @@ final class ImageDAO implements CrudDao {
 
     /**
      * Retourne l'image suivant celle passée en paramètre
-     * @param Image $image
+     * @param int $image
      * @return Image|null
      */
-    public static function getNextImage(Image $image) {
+    public static function getNextImage($image) {
         $res = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
-        $stmt->bindValue('id', $image->getId()+1);
+        $stmt->bindValue('id', $image+1);
         $stmt->execute();
 
         if($result = $stmt->fetch()) {

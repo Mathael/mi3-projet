@@ -4,6 +4,8 @@ namespace App;
 
 use App\model\User;
 use App\utils\Autoloader;
+use App\utils\Response;
+use App\utils\TemplateManager;
 
 session_start();
 
@@ -80,8 +82,16 @@ if($action == null || !method_exists($controller, $action)) {
     $action = 'indexAction';
 }
 
+// Déclaration du template manager
+// Même si l'IDEA détecte que la variable n'est pas utilisée, il l'est de manière 'global' par les controllers
+$template = new TemplateManager();
+
 // function PHP permettant de lancer un appel de fonction d'une class.
 // en paramètre :
 // - Tableau contenant la classe et la fonction à executer
 // - Second paramètre optionnel : les paramètres de la fonction à executer
-call_user_func([$controller, $action]);
+/** @var Response $response */
+$response = call_user_func([$controller, $action]);
+
+// Fin du traitement -> affichage du rendu HTML
+$response->getTemplate()->show();

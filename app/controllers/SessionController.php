@@ -3,7 +3,7 @@
 namespace App\controllers;
 use App\dao\UserDAO;
 use App\model\User;
-use App\utils\TemplateManager;
+use App\utils\Response;
 use App\utils\Util;
 
 /**
@@ -22,8 +22,7 @@ final class SessionController implements DefaultController
      * Affichage de la page de connexion
      */
     public static function indexAction() {
-        $template = new TemplateManager('sessions/login');
-        $template->show();
+        return new Response('sessions/login');
     }
 
     /**
@@ -35,13 +34,13 @@ final class SessionController implements DefaultController
 
         // Vérification des champs
         if(($username == null || empty($username)) || ($password == null || empty($password))) {
-            return; // TODO: error page
+            return IndexController::indexAction(); // TODO: error page
         }
 
         // Récupération de l'utilisateur correspondant et vérifie qu'il existe
         $dbuser = UserDAO::getUser($username, $password);
         if($dbuser == null) {
-            return; // TODO: error page
+            return IndexController::indexAction(); // TODO: error page
         }
 
         // Remet à zéro la session anonyme pour démarrer une session utilisateur
@@ -55,24 +54,22 @@ final class SessionController implements DefaultController
 
         // Redirige vers la page d'index
         // TODO: notifier l'utilisateur qu'il est bien connecté
-        IndexController::indexAction();
+        return IndexController::indexAction();
     }
 
     /**
      * Déconnecte l'utilisateur (session)
      */
     public static function logoutAction(){
-        if(empty($_SESSION['ROLE'])) {
-            // TODO: error -> Vous n'êtes pas connecté
+        if(!empty($_SESSION['authenticated'])) {
+            session_destroy();
         }
 
-        session_destroy();
-        IndexController::indexAction();
+        return IndexController::indexAction();
     }
 
     public static function registerformAction() {
-        $template = new TemplateManager('sessions/register');
-        $template->show();
+        return new Response('sessions/register');
     }
 
     /**
@@ -88,14 +85,14 @@ final class SessionController implements DefaultController
             ($password == null || empty($password)) ||
             ($password2nd == null || empty($password2nd))) {
             echo 'field wrong';
-            return; // TODO: error page
+            return IndexController::indexAction(); // TODO: error page
         }
 
         // Récupération de l'utilisateur correspondant et vérifie qu'il existe
         $usernameExists = UserDAO::userExists($username);
         if($usernameExists) {
             echo 'username exist';
-            return; // TODO: error page
+            return IndexController::indexAction(); // TODO: error page
         }
 
         // Crée l'utilisateur
@@ -107,7 +104,7 @@ final class SessionController implements DefaultController
 
         if($user == null) {
             echo 'user null';
-            return; // TODO: error page
+            return IndexController::indexAction(); // TODO: error page
         }
 
         session_reset();
@@ -117,6 +114,6 @@ final class SessionController implements DefaultController
         $_SESSION['user_id'] = $user->getId();
 
         // Retour à l'index
-        IndexController::indexAction();
+        return IndexController::indexAction();
     }
 }

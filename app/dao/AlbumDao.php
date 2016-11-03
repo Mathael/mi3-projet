@@ -22,7 +22,7 @@ final class AlbumDao implements CrudDao
         $name = Util::getValue($params, 'name', null);
         $ownerId = Util::getValue($params, 'ownerId', null);
 
-        if($name == null | $ownerId == null) {
+        if($name == null || $ownerId == null) {
             return false;
         }
 
