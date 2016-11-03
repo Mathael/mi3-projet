@@ -99,7 +99,7 @@ final class AdminController implements DefaultController {
             }
         }
 
-        $response->getTemplate()->assignObject($image); // TODO change to assign normal (need refactor template manager)
+        $response->getTemplate()->assignAlpha('Image.id', $image->getId()); // TODO change to assign normal (need refactor template manager)
         $response->getTemplate()->assignAlpha('result', ''); // clean; TODO
         return $response;
     }
@@ -116,14 +116,14 @@ final class AdminController implements DefaultController {
         if(!empty($_FILES['file']) && !empty($_POST))
         {
             $file = $_FILES['file'];
-            if(move_uploaded_file($file['tmp_name'], IMG_DIR.$file['name'])) {
+            if(move_uploaded_file($file['tmp_name'], UPLOAD_DIR.$file['name'])) {
                 $category = Util::getValue($_POST, 'category', null);
                 $comment = Util::getValue($_POST, 'comment', null);
 
                 if($category != null && $comment != null)
                     ImageDAO::create([
                         'url' => $file['name'],
-                        'catgory' => $category,
+                        'category' => $category,
                         'comment' => $comment
                     ]);
             }

@@ -33,6 +33,7 @@ define('DAO_DIR', PROJECT_DIR.'dao'.DS);
 define('UTIL_DIR', PROJECT_DIR.'utils'.DS);
 define('VIEW_DIR', PROJECT_DIR.'view'.DS);
 define('IMG_DIR', PROJECT_DIR.'assets'.DS.'images'.DS.'jons');
+define('UPLOAD_DIR', PROJECT_DIR.'assets'.DS.'images'.DS.'upload'.DS);
 
 require UTIL_DIR.'Autoloader.php';
 Autoloader::register();

@@ -23,5 +23,5 @@ class Config
 
     // Nom du répertoire direct après 'www' sans ajouter de slash ou d'antislash
     // Si le projet possède 'www' pour racine, alors laisser cette variable vide : ''
-    const APP_DIRECTORY = 'tp1';
+    const APP_DIRECTORY = 'tp1/app';
 }

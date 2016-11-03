@@ -1,3 +1,8 @@
-/app/assets/images
+/app/assets/images/jons/
+/app/assets/images/*.jpg
+/app/assets/images/*.png
+/app/assets/images/*.bmp
+/app/assets/images/*.gif
+/app/assets/images/*.jpeg
 .idea
 .DS_Store

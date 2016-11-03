@@ -43,8 +43,6 @@ class TemplateManager
             ->setStream($this->getContent($file));
     }
 
-    ////////////////////////////////////////////////
-
     // Ne supporte pas les tableaux de valeurs [1, 2, 3, 4, 5, 6] or ['key' => 1, ...]
     public function assignAlpha($key, $something) {
         $result = '';
@@ -70,13 +68,26 @@ class TemplateManager
         $this->assign($key, $result);
     }
 
+    /**
+     * @param Object $object l'objet dont les attributs vont être liés au flux HTML
+     * @return string le flux html de l'objet créé à partir d'un fichier html contenant "_small"
+     */
     private function assignObjectAlpha($object)
     {
-        $result = $this->getContent($this->getDirectory().'/'.$this->getFilename().'_small');
+        global $user;
+        $result = $user->getRole() == User::ROLE_ADMIN ? $this->getContent($this->getDirectory().'/'.$this->getFilename().'_small_admin') : $this->getContent($this->getDirectory().'/'.$this->getFilename().'_small');
         $result = $this->resolveObject($object, $result);
         return $result;
     }
 
+    /**
+     * TODO: description détaillée
+     *
+     * @param Object $object un objet ou un tableau d'objet
+     * @param string $result une variable contenant du html avec des {{key}} non résolues
+     * @param string $path une variable contenant le chemin actuelle des {{key}} en cas d'objets présents en attributs.
+     * @return string $result avec ses {{key}} traduite par les attributs de $object
+     */
     private function resolveObject($object, $result, $path = '')
     {
         // La réflection permet d'accéder aux informations d'une class.
@@ -118,20 +129,6 @@ class TemplateManager
         return $result;
     }
 
-    ////////////////////////////////////////////////
-
-    /**
-     * @param $key string : chaine de caractères présente dans le HTML sous forme {{valeur}}
-     * @param $value string : valeur réelle
-     */
-    public function assign($key, $value) {
-        if(empty($this->getStream())) {
-            echo ('Fichier HTML non non présent dans le TemplateManager');
-        }
-
-        $this->setStream(str_replace('{{'.$key.'}}', $value, $this->getStream()));
-    }
-
     /**
      * Incorpore un fichier HTML dans le HTML courant (getFile()); à la place des {{$key}}
      * @param $key string
@@ -139,7 +136,7 @@ class TemplateManager
      */
     public function assignTemplate($key, $file) {
         if(empty($file)) {
-            echo ('TemplateManager: Fichier HTML non non présent');
+            echo ('TemplateManager: Fichier HTML non présent');
         }
 
         $this->assign($key, $this->getContent($file));
@@ -167,45 +164,16 @@ class TemplateManager
         $this->assign($key, $result);
     }
 
-    public function assignObject($object) {
-        // La réflection permet d'accéder aux attributs privé (sinon il faudrait les passer en public)
-        $reflect = new ReflectionClass($object);
-        $props = $reflect->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
-
-        // Pour chaque objet, accède à ses attributs pour repérer les clé valeurs à modifier dans le HTML
-        foreach ($props as $attr) {
-            $method = 'get'.ucfirst($attr->getName());
-            $classname = (new ReflectionClass($object))->getShortName();
-            $this->setStream(str_replace('{{'.$classname.'.'.$attr->getName().'}}', $object->$method(), $this->getStream()));
-        }
-    }
-
     /**
-     * @param $key string
-     * @param $templateName string
-     * @param $objects array
+     * @param $key string : chaine de caractères présente dans le HTML sous forme {{valeur}}
+     * @param $value string : valeur réelle
      */
-    public function assignArrayObjects($key, $templateName, $objects) {
-        $result = '';
-        $template = $this->getContent($templateName);
-
-        // Boucle sur chaque objet de la liste d'objets à traiter
-        foreach ($objects as $object) {
-            $result .= $template;
-
-            // La réflection permet d'accéder aux attributs privé (sinon il faudrait les passer en public)
-            $reflect = new ReflectionClass($object);
-            $props = $reflect->getProperties(ReflectionProperty::IS_PROTECTED | ReflectionProperty::IS_PRIVATE);
-
-            // Pour chaque objet, accède à ses attributs pour repérer les clé valeurs à modifier dans le HTML
-            foreach ($props as $attr) {
-                $method = 'get'.ucfirst($attr->getName());
-                $classname = (new ReflectionClass($object))->getShortName();
-                $result = str_replace('{{'.$classname.'.'.$attr->getName().'}}', $object->$method(), $result);
-            }
+    private function assign($key, $value) {
+        if(empty($this->getStream())) {
+            echo ('Le flux HTML est vide');
         }
 
-        $this->assign($key, $result);
+        $this->setStream(str_replace('{{'.$key.'}}', $value, $this->getStream()));
     }
 
     /**
@@ -216,6 +184,7 @@ class TemplateManager
      */
     public function cleanup() {
         $this->setStream(str_replace('{{app_url}}', Config::APP_URL, $this->getStream()));
+        $this->setStream(str_replace('{{app_directory}}', Config::APP_DIRECTORY, $this->getStream()));
         $this->setStream(str_replace('{{app_assets}}', Config::APP_URL.Config::APP_DIRECTORY.DS.'assets'.DS, $this->getStream()));
     }
 

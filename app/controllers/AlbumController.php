@@ -58,13 +58,11 @@ final class AlbumController implements DefaultController
 
     public static function showAction() {
         $id = Util::getValue($_GET, 'id', null);
-        if($id == null)
-        {
-            return self::indexAction();
-        }
+
+        if($id == null) return self::indexAction();
 
         $response = new Response('album/show');
-        $album = AlbumDao::findByIdAndOwnerId($_SESSION['user_id']);
+        $album = AlbumDao::findByIdAndOwnerId($id);
 
         if($album != null)
         {
@@ -72,7 +70,7 @@ final class AlbumController implements DefaultController
             $response->getTemplate()->assignAlpha('images', $album->getImages());
         }
 
-        $response->getTemplate()->assign('album', 'Vous n\'avez pas d\'albums !');
+        $response->getTemplate()->assignAlpha('album', 'Vous n\'avez pas d\'albums !');
         return $response;
     }
 

@@ -128,11 +128,12 @@ final class AlbumDao implements CrudDao
      */
     public static function findByIdAndOwnerId($id)
     {
+        global $user;
         $album = NULL;
 
         $stmt = Database::getInstance()->prepare('SELECT * FROM album WHERE id = :id AND owner = :owner');
         $stmt->bindValue('id', $id);
-        $stmt->bindValue('owner', $_SESSION['user_id']);
+        $stmt->bindValue('owner', $user->getId());
         $stmt->execute();
 
         if($res = $stmt->fetch()) {
