@@ -224,12 +224,12 @@ class TemplateManager
         $right = '';
 
         if(!empty($_SESSION['authenticated'])) {
-            $left .= '<li class="nav-item"><a class="nav-link" href="?page=album">Albums</a></li>';
+            $left .= '<li class="nav-item"><a class="nav-link" href="?page=album"><i class="fa fa-book" aria-hidden="true"></i> Albums</a></li>';
             if($user->getRole() == User::ROLE_ADMIN)
                 $right .= '<li class="nav-item"><a class="nav-link" href="?page=admin"><i class="fa fa-cog" aria-hidden="true"></i> Administration</a></li>';
-            $right .= '<li class="nav-item"><a class="nav-link" href="?page=session&action=logout">Déconnexion ['.$user->getUsername().']</a></li>';
+            $right .= '<li class="nav-item"><a class="nav-link" href="?page=session&action=logout"><i class="fa fa-power-off" aria-hidden="true"></i> Déconnexion ['.$user->getUsername().']</a></li>';
         } else {
-            $right .= '<li class="nav-item"><a class="nav-link" href="?page=session">Connexion</a></li>';
+            $right .= '<li class="nav-item"><a class="nav-link" href="?page=session"><i class="fa fa-power-off" aria-hidden="true"></i>  Connexion</a></li>';
             $right .= '<li class="nav-item"><a class="nav-link" href="?page=session&action=registerform">Inscription</a></li>';
         }
 
