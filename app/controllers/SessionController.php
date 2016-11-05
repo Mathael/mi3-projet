@@ -45,12 +45,16 @@ final class SessionController implements DefaultController
 
         // Remet à zéro la session anonyme pour démarrer une session utilisateur
         session_reset();
+        $_SESSION = [];
 
         // Actuellement, seul l'admin se connecte donc tous les comptes sont admin.
         $_SESSION['authenticated'] = true;
         $_SESSION['user_role'] = $dbuser->getRole();
         $_SESSION['user_username'] = $dbuser->getUsername();
         $_SESSION['user_id'] = $dbuser->getId();
+
+        global $user;
+        $user = $dbuser;
 
         // Redirige vers la page d'index
         // TODO: notifier l'utilisateur qu'il est bien connecté
@@ -62,6 +66,14 @@ final class SessionController implements DefaultController
      */
     public static function logoutAction(){
         if(!empty($_SESSION['authenticated'])) {
+            global $user;
+            $user = new User([
+                'id' => -1,
+                'username' => 'Anonymous',
+                'password' => '',
+                'role' => 0
+            ]);
+            $_SESSION = [];
             session_destroy();
         }
 
@@ -84,34 +96,34 @@ final class SessionController implements DefaultController
         if(($username == null || empty($username)) ||
             ($password == null || empty($password)) ||
             ($password2nd == null || empty($password2nd))) {
-            echo 'field wrong';
             return IndexController::indexAction(); // TODO: error page
         }
 
         // Récupération de l'utilisateur correspondant et vérifie qu'il existe
         $usernameExists = UserDAO::userExists($username);
         if($usernameExists) {
-            echo 'username exist';
             return IndexController::indexAction(); // TODO: error page
         }
 
         // Crée l'utilisateur
-        $user = UserDAO::create([
+        $dbuser = UserDAO::create([
             'username' => $username,
             'password' => $password,
             'role' => User::ROLE_USER
         ]);
 
-        if($user == null) {
-            echo 'user null';
+        if($dbuser == null) {
             return IndexController::indexAction(); // TODO: error page
         }
 
         session_reset();
         $_SESSION['authenticated'] = true;
-        $_SESSION['user_role'] = $user->getRole();
-        $_SESSION['user_username'] = $user->getUsername();
-        $_SESSION['user_id'] = $user->getId();
+        $_SESSION['user_role'] = $dbuser->getRole();
+        $_SESSION['user_username'] = $dbuser->getUsername();
+        $_SESSION['user_id'] = $dbuser->getId();
+
+        global $user;
+        $user = $dbuser;
 
         // Retour à l'index
         return IndexController::indexAction();
