@@ -10,10 +10,14 @@ use App\utils\Util;
 final class ImageController implements DefaultController {
 
     public static function indexAction() {
-        $id = Util::getValue($_GET, 'id', ImageDAO::getFirstImage()->getId());
+        $id = Util::getValue($_GET, 'id', null);
         $display = Util::getValue($_GET, 'display', 1);
 
-        $images = $display != 1 ? ImageDAO::getImageList($id, $display) : ImageDAO::getFirstImage();
+        // Si l'id n'est pas présent c'est qu'on est arrivée pour la première fois sur la page, on affiche la première image
+        $first = $id == null ? ImageDAO::getFirstImage() : null;
+        $id = $first->getId();
+
+        $images = $display != 1 ? ImageDAO::getImageList($id, $display) : $first;
 
         if(empty($images)) {
             return IndexController::indexAction();

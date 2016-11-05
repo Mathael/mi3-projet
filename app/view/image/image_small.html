@@ -5,6 +5,14 @@
         <p class="card-text">{{Image.comment}}</p>
         <p class="card-text"><i class="fa fa-tag" aria-hidden="true"></i> <span class="tag tag-info">{{Image.category}}</span></p>
         <div>
+            <a href="?page=image&action=index&id={{Image.id}}&display={{display}}&star=1"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+            <a href="?page=image&action=index&id={{Image.id}}&display={{display}}&star=2"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+            <a href="?page=image&action=index&id={{Image.id}}&display={{display}}&star=3"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+            <a href="?page=image&action=index&id={{Image.id}}&display={{display}}&star=4"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+            <a href="?page=image&action=index&id={{Image.id}}&display={{display}}&star=5"><i class="fa fa-star-o" aria-hidden="true"></i></a>
+            Note : {{Image.stars}}
+        </div>
+        <div>
             <p style="margin: 0;">
                 Ajouter à un album :
                 <a href="?page=album&action=addToAlbum&image={{Image.id}}">

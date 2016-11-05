@@ -13,6 +13,9 @@ use PDO;
  */
 final class ImageDAO implements CrudDao {
 
+    //private static $QUERY_SELECT_FIRST_IMAGE = 'SELECT i.*, avg(s.stars) as stars FROM image i INNER JOIN image_stars s ON i.id = s.imageId GROUP BY s.imageId ORDER BY i.id ASC LIMIT 1';
+    private static $QUERY_SELECT_IMAGE_STARS = 'SELECT avg(stars) as stars FROM image_stars WHERE imageId = :id GROUP BY imageId';
+
     /**
      * Retourne un objet Image en fonction de son id
      * @param $id integer
@@ -26,6 +29,8 @@ final class ImageDAO implements CrudDao {
 
         if($result = $stmt->fetch()) {
             $image = new Image($result);
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
         }
         return $image;
     }
@@ -42,22 +47,15 @@ final class ImageDAO implements CrudDao {
         $stmt->bindValue('nb', $id+$count-1);
         $stmt->execute();
 
-        $res = [];
-        while($result = $stmt->fetch()) {
-            $res[] = new Image($result);
+        /** @var Image[] $images */
+        $images = $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
+
+        foreach($images as $image) {
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
         }
-        return $res;
-    }
 
-    /**
-     * Retourne un tableau d'objets Image correspondant à l'ensemble des lignes (row) de la table image
-     * @return array
-     */
-    public static function getAll() {
-        $stmt = Database::getInstance()->prepare('SELECT * FROM image');
-        $stmt->execute();
-
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
+        return $images;
     }
 
     /**
@@ -71,6 +69,8 @@ final class ImageDAO implements CrudDao {
 
         if($result = $stmt->fetch()) {
             $image = new Image($result);
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
         }
         return $image;
     }
@@ -88,6 +88,8 @@ final class ImageDAO implements CrudDao {
 
         if($result = $stmt->fetch()) {
             $image = new Image($result);
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
         }
         return $image;
     }
@@ -104,9 +106,12 @@ final class ImageDAO implements CrudDao {
         $stmt->execute();
 
         if($result = $stmt->fetch()) {
-            $res = new Image($result);
+            $image = new Image($result);
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
+
         }
-        return $res;
+        return $image;
     }
 
     /**
@@ -135,6 +140,8 @@ final class ImageDAO implements CrudDao {
 
         if($result = $stmt->fetch()) {
             $image = new Image($result);
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
         }
         return $image;
     }
@@ -166,9 +173,20 @@ final class ImageDAO implements CrudDao {
         $stmt = Database::getInstance()->prepare($statement);
         $stmt->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
+        /** @var Image[] $images */
+        $images = $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
+
+        foreach($images as $image) {
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
+        }
+
+        return $images;
     }
 
+    /**
+     * @return string[] l'ensemble des catégories d'images présentes dans la bdd
+     */
     public static function getCategories() {
         $stmt = Database::getInstance()->prepare('SELECT category FROM image GROUP BY category');
         $stmt->execute();
@@ -177,10 +195,10 @@ final class ImageDAO implements CrudDao {
     }
 
     /**
-     * @param $id
-     * @param $comment
-     * @param $category
-     * @return bool
+     * @param $id int l'identifiant correspondant à l'image qu'on veut modifier
+     * @param $comment string la nouvelle valeur (ou l'ancienne si non modifiée)
+     * @param $category string la nouvelle catégorie (ou l'ancienne si non modifiée)
+     * @return bool true si succès de la requête, false sinon
      */
     public static function edit($id, $comment, $category) {
         $stmt = Database::getInstance()->prepare('UPDATE image SET comment = :comment, category = :category WHERE id=:id');
@@ -191,7 +209,7 @@ final class ImageDAO implements CrudDao {
     }
 
     /**
-     * @param $id
+     * @param $id int l'identifiant de l'image à modifier
      * @return bool
      */
     public static function delete($id) {
@@ -218,8 +236,32 @@ final class ImageDAO implements CrudDao {
      */
     public static function findAll()
     {
+        /** @var Image[] $images */
         $stmt = Database::getInstance()->prepare('SELECT * FROM image');
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
+        $images = $stmt->fetchAll(PDO::FETCH_CLASS, Image::class);
+
+        foreach($images as $image) {
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
+        }
+
+        return $images;
+    }
+
+    /**
+     * @param $id int l'identifiant de l'image pour laquelle on veut récupérer la moyenne des vote
+     * @return int la moyenne des votes attribuée à l'image d'identifiant $id
+     */
+    public static function findStarsByImageId($id) {
+        $stmt = Database::getInstance()->prepare(self::$QUERY_SELECT_IMAGE_STARS);
+        $stmt->bindValue('id', $id);
+        $stmt->execute();
+
+        $cnt = 0;
+        if($result = $stmt->fetch()) {
+            $cnt = $result['stars'] != null ? $result['stars'] : 0;
+        }
+        return $cnt;
     }
 }
