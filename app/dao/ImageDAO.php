@@ -277,4 +277,16 @@ final class ImageDAO implements CrudDao {
         $stmt->bindValue('stars', $vote);
         return $stmt->execute(); // changer l'INSERT IGNORE et catch l'erreur retournée
     }
+
+    public static function getImageByCategorie($category){
+        $table = [];
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE category=:category');
+        $stmt->bindValue('category', $category);
+        $stmt->execute();
+
+        while($result = $stmt->fetch()) {
+            $table[] = new Image($result);
+        }
+        return $table;
+    }
 }
