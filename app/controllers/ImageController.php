@@ -89,4 +89,36 @@ final class ImageController implements DefaultController {
         $response->getTemplate()->assignAlpha('size', 480 * Util::getValue($_GET, 'size', 1));
         $response->getTemplate()->assignAlpha('display', Util::getValue($_GET, 'display', 1));
     }
+
+    /**
+     * Construction du formulaire listant les différentes catégories d'images
+     * @return string
+     */
+    private static function buildCategory(){
+        $categories  = ImageDAO::getCategories();
+        $options = '';
+
+        foreach ($categories as $category){
+            $options .= '<option value="'.$category.'">'.$category.'</option>';
+        }
+        return $options;
+    }
+
+    public static function categoryAction(){
+        $category = Util::getValue($_POST, 'category', null);
+
+        if($category == null) return self::indexAction();
+
+        $images = ImageDAO::getImageByCategorie($category);
+
+        //Ajout de la lite des category
+        $option = self::buildCategory();
+
+        // Appel de la vue associée à l'action
+        $response = new Response('image/image');
+        $response->getTemplate()->assignAlpha('images', $images);
+        $response->getTemplate()->assignAlpha('options',$option);
+        self::assignParameters($response);
+        return $response;
+    }
 }
