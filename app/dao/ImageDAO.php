@@ -44,7 +44,7 @@ final class ImageDAO implements CrudDao {
     public static function getImageList($id, $count) {
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id >= :id AND id <= :nb');
         $stmt->bindValue('id', $id);
-        $stmt->bindValue('nb', $id+$count-1);
+        $stmt->bindValue('nb', max(1, $id+$count-1));
         $stmt->execute();
 
         /** @var Image[] $images */
@@ -54,7 +54,6 @@ final class ImageDAO implements CrudDao {
             $stars = self::findStarsByImageId($image->getId());
             $image->setStars($stars);
         }
-
         return $images;
     }
 
@@ -263,5 +262,19 @@ final class ImageDAO implements CrudDao {
             $cnt = $result['stars'] != null ? $result['stars'] : 0;
         }
         return $cnt;
+    }
+
+    /**
+     * @param $imgId int l'identifiant de l'image pour laquelle le vote est effectué
+     * @param $vote int nombre d'étoiles attribuées
+     * @return bool success / fail
+     */
+    public static function proceedVote($imgId, $vote) {
+        global $user;
+        $stmt = Database::getInstance()->prepare('INSERT IGNORE image_stars VALUES(:userId, :imageId, :stars)');
+        $stmt->bindValue('imageId', $imgId);
+        $stmt->bindValue('userId', $user->getId());
+        $stmt->bindValue('stars', $vote);
+        return $stmt->execute(); // changer l'INSERT IGNORE et catch l'erreur retournée
     }
 }

@@ -13,11 +13,19 @@ final class ImageController implements DefaultController {
         $id = Util::getValue($_GET, 'id', null);
         $display = Util::getValue($_GET, 'display', 1);
 
-        // Si l'id n'est pas présent c'est qu'on est arrivée pour la première fois sur la page, on affiche la première image
-        $first = $id == null ? ImageDAO::getFirstImage() : null;
-        $id = $first->getId();
+        $first = null;
+        if($id == null) {
+            $first = ImageDAO::getFirstImage();
+            if(empty($first)) return IndexController::indexAction(); // No image in database
+            $id = $first->getId();
+        }
 
-        $images = $display != 1 ? ImageDAO::getImageList($id, $display) : $first;
+        $images = null;
+        if($display != 1) {
+            $images = ImageDAO::getImageList($id, $display);
+        } else {
+            $images = $first == null ? ImageDAO::findById($id) : $first;
+        }
 
         if(empty($images)) {
             return IndexController::indexAction();
@@ -54,7 +62,7 @@ final class ImageController implements DefaultController {
         $display = Util::getValue($_GET, 'display', 1);
 
         /** @var Image|Image[] $images */
-        $images = $display != 1 ? $images = ImageDAO::getImageList($id + max(1, ($display - 1)), $display) : ImageDAO::getNextImage($id);
+        $images = $display != 1 ? $images = ImageDAO::getImageList($id+1, $display) : ImageDAO::getNextImage($id);
 
         if(empty($images)) {
             return IndexController::indexAction();
@@ -66,6 +74,15 @@ final class ImageController implements DefaultController {
         $response->getTemplate()->assignAlpha('images', $images);
         self::assignParameters($response);
         return $response;
+    }
+
+    public static function voteAction() {
+        $id = Util::getValue($_GET, 'id', null);
+        $vote = Util::getValue($_GET, 'stars', null);
+
+        if($id != null && $vote != null) ImageDAO::proceedVote($id, $vote); // TODO: AJAX notification success/fail
+
+        return self::indexAction();
     }
 
     private static function assignParameters(Response $response) {
