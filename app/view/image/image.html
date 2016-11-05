@@ -14,6 +14,15 @@
     </ul>
 </section>
 <section>
+    <form method="POST" action="?page=image&action=category">
+        <label for="category">Tri par catégorie </label>
+        <select name="category" id="category">
+            {{options}}
+        </select>
+        <input type="submit">
+    </form>
+</section>
+<section>
     <div class="card-deck">
         {{images}}
     </div>

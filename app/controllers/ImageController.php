@@ -35,6 +35,7 @@ final class ImageController implements DefaultController {
         $response = new Response('image/image');
         $response->getTemplate()->assignAlpha('images', $images);
         $response->getTemplate()->assignAlpha('id', is_array($images) ? $images[0]->getId() : $images->getId());
+        $response->getTemplate()->assignAlpha('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }
@@ -53,6 +54,7 @@ final class ImageController implements DefaultController {
         $response = new Response('image/image');
         $response->getTemplate()->assignAlpha('images', $images);
         $response->getTemplate()->assignAlpha('id', is_array($images) ? $images[0]->getId() : $images->getId());
+        $response->getTemplate()->assignAlpha('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }
@@ -72,6 +74,7 @@ final class ImageController implements DefaultController {
         $response = new Response('image/image');
         $response->getTemplate()->assignAlpha('id', is_array($images) ? $images[0]->getId() : $images->getId());
         $response->getTemplate()->assignAlpha('images', $images);
+        $response->getTemplate()->assignAlpha('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }
@@ -111,13 +114,10 @@ final class ImageController implements DefaultController {
 
         $images = ImageDAO::getImageByCategorie($category);
 
-        //Ajout de la lite des category
-        $option = self::buildCategory();
-
         // Appel de la vue associée à l'action
         $response = new Response('image/image');
         $response->getTemplate()->assignAlpha('images', $images);
-        $response->getTemplate()->assignAlpha('options',$option);
+        $response->getTemplate()->assignAlpha('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }
