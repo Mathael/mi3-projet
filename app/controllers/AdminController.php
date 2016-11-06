@@ -55,7 +55,7 @@ final class AdminController implements DefaultController {
         $resultPage = ImageDAO::delete($imgId) ? 'admin/image_remove_success' : 'admin/image_remove_fail';
 
         $response = new Response($resultPage);
-        $response->getTemplate()->assignAlpha('id', $imgId);
+        $response->getTemplate()->assign('id', $imgId);
         return $response;
     }
 
@@ -99,8 +99,8 @@ final class AdminController implements DefaultController {
             }
         }
 
-        $response->getTemplate()->assignAlpha('Image.id', $image->getId()); // TODO change to assign normal (need refactor template manager)
-        $response->getTemplate()->assignAlpha('result', ''); // clean; TODO
+        $response->getTemplate()->assign('Image.id', $image->getId()); // TODO change to assign normal (need refactor template manager)
+        $response->getTemplate()->assign('result', ''); // clean; TODO
         return $response;
     }
 

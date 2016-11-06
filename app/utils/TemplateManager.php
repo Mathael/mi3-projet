@@ -44,7 +44,7 @@ class TemplateManager
     }
 
     // Ne supporte pas les tableaux de valeurs [1, 2, 3, 4, 5, 6] or ['key' => 1, ...]
-    public function assignAlpha($key, $something) {
+    public function assign($key, $something) {
         $result = '';
 
         if(!is_array($something))
@@ -65,7 +65,7 @@ class TemplateManager
             }
         }
 
-        $this->assign($key, $result);
+        $this->assignKeyValue($key, $result);
     }
 
     /**
@@ -139,7 +139,7 @@ class TemplateManager
             echo ('TemplateManager: Fichier HTML non présent');
         }
 
-        $this->assign($key, $this->getContent($file));
+        $this->assignKeyValue($key, $this->getContent($file));
     }
 
     /**
@@ -148,7 +148,7 @@ class TemplateManager
      */
     public function assignArray($array) {
         foreach ($array as $key => $value) {
-            $this->assign($key, $value);
+            $this->assignKeyValue($key, $value);
         }
     }
 
@@ -161,14 +161,14 @@ class TemplateManager
             $result = str_replace('{{'.$templateKey.'}}', $value, $result);
         }
 
-        $this->assign($key, $result);
+        $this->assignKeyValue($key, $result);
     }
 
     /**
      * @param $key string : chaine de caractères présente dans le HTML sous forme {{valeur}}
      * @param $value string : valeur réelle
      */
-    private function assign($key, $value) {
+    private function assignKeyValue($key, $value) {
         if(empty($this->getStream())) {
             echo ('Le flux HTML est vide');
         }

@@ -31,8 +31,8 @@ final class TestController implements DefaultController {
     public static function templateAction() {
         // Test du moteur de template
         $response = new Response('tests/test');
-        $response->getTemplate()->assignAlpha('title', 'ITS WORKS !');
-        $response->getTemplate()->assignAlpha('content', 'Affichage d\'un contenu aléatoire !');
+        $response->getTemplate()->assign('title', 'ITS WORKS !');
+        $response->getTemplate()->assign('content', 'Affichage d\'un contenu aléatoire !');
         return $response;
     }
 
@@ -46,8 +46,8 @@ final class TestController implements DefaultController {
 
         // Test du moteur de template avec tableau de paramètres
         $response = new Response('tests/test_array');
-        $response->getTemplate()->assignAlpha('title', 'ITS WORKS !');
-        $response->getTemplate()->assignAlpha('content', $images);
+        $response->getTemplate()->assign('title', 'ITS WORKS !');
+        $response->getTemplate()->assign('content', $images);
         return $response;
     }
 

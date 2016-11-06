@@ -33,9 +33,9 @@ final class ImageController implements DefaultController {
 
         // Appel de la vue associée à l'action
         $response = new Response('image/image');
-        $response->getTemplate()->assignAlpha('images', $images);
-        $response->getTemplate()->assignAlpha('id', is_array($images) ? $images[0]->getId() : $images->getId());
-        $response->getTemplate()->assignAlpha('options', self::buildCategory());
+        $response->getTemplate()->assign('images', $images);
+        $response->getTemplate()->assign('id', is_array($images) ? $images[0]->getId() : $images->getId());
+        $response->getTemplate()->assign('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }
@@ -52,9 +52,9 @@ final class ImageController implements DefaultController {
 
         // Appel de la vue associée à l'action
         $response = new Response('image/image');
-        $response->getTemplate()->assignAlpha('images', $images);
-        $response->getTemplate()->assignAlpha('id', is_array($images) ? $images[0]->getId() : $images->getId());
-        $response->getTemplate()->assignAlpha('options', self::buildCategory());
+        $response->getTemplate()->assign('images', $images);
+        $response->getTemplate()->assign('id', is_array($images) ? $images[0]->getId() : $images->getId());
+        $response->getTemplate()->assign('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }
@@ -72,9 +72,9 @@ final class ImageController implements DefaultController {
 
         // Appel de la vue associée à l'action
         $response = new Response('image/image');
-        $response->getTemplate()->assignAlpha('id', is_array($images) ? $images[0]->getId() : $images->getId());
-        $response->getTemplate()->assignAlpha('images', $images);
-        $response->getTemplate()->assignAlpha('options', self::buildCategory());
+        $response->getTemplate()->assign('id', is_array($images) ? $images[0]->getId() : $images->getId());
+        $response->getTemplate()->assign('images', $images);
+        $response->getTemplate()->assign('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }
@@ -89,8 +89,8 @@ final class ImageController implements DefaultController {
     }
 
     private static function assignParameters(Response $response) {
-        $response->getTemplate()->assignAlpha('size', 480 * Util::getValue($_GET, 'size', 1));
-        $response->getTemplate()->assignAlpha('display', Util::getValue($_GET, 'display', 1));
+        $response->getTemplate()->assign('size', 480 * Util::getValue($_GET, 'size', 1));
+        $response->getTemplate()->assign('display', Util::getValue($_GET, 'display', 1));
     }
 
     /**
@@ -116,8 +116,8 @@ final class ImageController implements DefaultController {
 
         // Appel de la vue associée à l'action
         $response = new Response('image/image');
-        $response->getTemplate()->assignAlpha('images', $images);
-        $response->getTemplate()->assignAlpha('options', self::buildCategory());
+        $response->getTemplate()->assign('images', $images);
+        $response->getTemplate()->assign('options', self::buildCategory());
         self::assignParameters($response);
         return $response;
     }

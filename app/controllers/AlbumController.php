@@ -34,10 +34,10 @@ final class AlbumController implements DefaultController
 
         if($albums != null)
         {
-            $response->getTemplate()->assignAlpha('albums', $albums);
+            $response->getTemplate()->assign('albums', $albums);
         }
 
-        $response->getTemplate()->assignAlpha('albums', 'Vous n\'avez pas d\'albums !');
+        $response->getTemplate()->assign('albums', 'Vous n\'avez pas d\'albums !');
         return $response;
     }
 
@@ -66,11 +66,11 @@ final class AlbumController implements DefaultController
 
         if($album != null)
         {
-            $response->getTemplate()->assignAlpha('name', $album->getName());
-            $response->getTemplate()->assignAlpha('images', $album->getImages());
+            $response->getTemplate()->assign('name', $album->getName());
+            $response->getTemplate()->assign('images', $album->getImages());
         }
 
-        $response->getTemplate()->assignAlpha('album', 'Vous n\'avez pas d\'albums !');
+        $response->getTemplate()->assign('album', 'Vous n\'avez pas d\'albums !');
         return $response;
     }
 
@@ -108,8 +108,8 @@ final class AlbumController implements DefaultController
         }
 
         $response = new Response('album/choose_album');
-        $response->getTemplate()->assignAlpha('select', $select);
-        $response->getTemplate()->assignAlpha('image', $image);
+        $response->getTemplate()->assign('select', $select);
+        $response->getTemplate()->assign('image', $image);
         return $response;
     }
 }
