@@ -27,7 +27,6 @@ class Response
 
     public function __construct($file)
     {
-        global $user;
         global $template;
 
         $template->init($file);
