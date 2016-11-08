@@ -7,6 +7,11 @@ use App\model\Image;
 use App\utils\Response;
 use App\utils\Util;
 
+/**
+ * Class ImageController
+ * @author Lucas Georges
+ * @package App\controllers
+ */
 final class ImageController implements DefaultController {
 
     public static function indexAction() {
@@ -64,7 +69,7 @@ final class ImageController implements DefaultController {
         $display = Util::getValue($_GET, 'display', 1);
 
         /** @var Image|Image[] $images */
-        $images = $display != 1 ? $images = ImageDAO::getImageList($id+1, $display) : ImageDAO::getNextImage($id);
+        $images = $display != 1 ? $images = ImageDAO::getImageList($id+$display, $display) : ImageDAO::getNextImage($id);
 
         if(empty($images)) {
             return IndexController::indexAction();
@@ -88,23 +93,36 @@ final class ImageController implements DefaultController {
         return self::indexAction();
     }
 
-    private static function assignParameters(Response $response) {
-        $response->getTemplate()->assign('size', 480 * Util::getValue($_GET, 'size', 1));
-        $response->getTemplate()->assign('display', Util::getValue($_GET, 'display', 1));
+    public static function previousAction() {
+        $id = Util::getValue($_GET, 'id', 1);
+        $display = Util::getValue($_GET, 'display', 1);
+
+        /** @var Image|Image[] $images */
+        $images = $display != 1 ? $images = ImageDAO::getImageList($id-$display, $display) : ImageDAO::getPrevImage($id);
+
+        if(empty($images)) {
+            return IndexController::indexAction();
+        }
+
+        // Appel de la vue associée à l'action
+        $response = new Response('image/image');
+        $response->getTemplate()->assign('id', is_array($images) ? $images[0]->getId() : $images->getId());
+        $response->getTemplate()->assign('images', $images);
+        $response->getTemplate()->assign('options', self::buildCategory());
+        self::assignParameters($response);
+        return $response;
     }
 
-    /**
-     * Construction du formulaire listant les différentes catégories d'images
-     * @return string
-     */
-    private static function buildCategory(){
-        $categories  = ImageDAO::getCategories();
-        $options = '';
+    public static function moreAction() {
+        $display = Util::getValue($_GET, 'display', 1);
+        $_GET['display'] = $display *= 2;
+        return self::indexAction();
+    }
 
-        foreach ($categories as $category){
-            $options .= '<option value="'.$category.'">'.$category.'</option>';
-        }
-        return $options;
+    public static function lessAction() {
+        $display = Util::getValue($_GET, 'display', 1);
+        $_GET['display'] = max(1, $display /= 2);
+        return self::indexAction();
     }
 
     public static function categoryAction(){
@@ -119,6 +137,36 @@ final class ImageController implements DefaultController {
         $response->getTemplate()->assign('images', $images);
         $response->getTemplate()->assign('options', self::buildCategory());
         self::assignParameters($response);
+        $response->getTemplate()->assign('id', is_array($images) ? $images[0]->getId() : $images->getId());
         return $response;
+    }
+
+    // Not used
+    public static function zoominAction() {
+        $size = Util::getValue($_GET, 'size', 1);
+        $_GET['size'] = $size += 0.25;
+        return self::indexAction();
+    }
+
+    // Not used
+    public static function zoomoutAction() {
+        $size = Util::getValue($_GET, 'size', 1);
+        $_GET['size'] = $size -= 0.25;
+        return self::indexAction();
+    }
+
+    private static function buildCategory(){
+        $categories  = ImageDAO::getCategories();
+        $options = '';
+
+        foreach ($categories as $category){
+            $options .= '<option value="'.$category.'">'.$category.'</option>';
+        }
+        return $options;
+    }
+
+    private static function assignParameters(Response $response) {
+        $response->getTemplate()->assign('size', 480 * Util::getValue($_GET, 'size', 1));
+        $response->getTemplate()->assign('display', Util::getValue($_GET, 'display', 1));
     }
 }

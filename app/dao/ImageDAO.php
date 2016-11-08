@@ -9,6 +9,7 @@ use PDO;
  * Permet l'accès aux données et de les renvoyer sous forme d'instance
  * ou de tableau d'instances.
  *
+ * @author Lucas Georges
  * Class ImageDAO
  */
 final class ImageDAO implements CrudDao {
@@ -75,16 +76,18 @@ final class ImageDAO implements CrudDao {
     }
 
     /**
-     * Retourne l'image précédant celle passée en paramètre
-     * @param Image $image
-     * @return Image
+     * Retourne l'image précédant celle ayant l'id passé en paramètre
+     * @param $id
+     * @return Image|NULL
+     * @internal param Image $image
      */
-    public static function getPrevImage(Image $image) {
+    public static function getPrevImage($id) {
         $res = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
-        $stmt->bindValue('id', max(1, $image->getId()-1));
+        $stmt->bindValue('id', max(1, $id-1));
         $stmt->execute();
 
+        $image = null;
         if($result = $stmt->fetch()) {
             $image = new Image($result);
             $stars = self::findStarsByImageId($image->getId());
@@ -94,16 +97,18 @@ final class ImageDAO implements CrudDao {
     }
 
     /**
-     * Retourne l'image suivant celle passée en paramètre
-     * @param int $image
+     * Retourne l'image suivant celle ayant l'id passé en paramètre
+     * @param $id
      * @return Image|null
+     * @internal param int $image l'id de l'image
      */
-    public static function getNextImage($image) {
+    public static function getNextImage($id) {
         $res = NULL;
         $stmt = Database::getInstance()->prepare('SELECT * FROM image WHERE id=:id');
-        $stmt->bindValue('id', $image+1);
+        $stmt->bindValue('id', $id+1);
         $stmt->execute();
 
+        $image = null;
         if($result = $stmt->fetch()) {
             $image = new Image($result);
             $stars = self::findStarsByImageId($image->getId());
