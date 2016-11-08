@@ -46,6 +46,23 @@ final class ImageController implements DefaultController {
         return $response;
     }
 
+    /**
+     * @return Response affichage de la dernière image de la base de donnée
+     */
+    public static function lastAction() {
+        $image = ImageDAO::findLast();
+
+        if($image == null) {
+            return self::indexAction();
+        }
+
+        $response = new Response('image/image');
+        $response->getTemplate()->assign('images', $image);
+        $response->getTemplate()->assign('options', self::buildCategory());
+        self::assignParameters($response);
+        return $response;
+    }
+
     public static function randomAction() {
         $display = Util::getValue($_GET, 'display', 1);
 

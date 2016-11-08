@@ -110,7 +110,7 @@ final class AdminController implements DefaultController {
 
                 if($category != null && $comment != null)
                     ImageDAO::create([
-                        'url' => $file['name'],
+                        'url' => 'upload/'.$file['name'],
                         'category' => $category,
                         'comment' => $comment
                     ]);

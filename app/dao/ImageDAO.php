@@ -76,6 +76,22 @@ final class ImageDAO implements CrudDao {
     }
 
     /**
+     * @return Image|null
+     */
+    public static function findLast() {
+        $image = NULL;
+        $stmt = Database::getInstance()->prepare('SELECT * FROM image ORDER BY id DESC LIMIT 1');
+        $stmt->execute();
+
+        if($result = $stmt->fetch()) {
+            $image = new Image($result);
+            $stars = self::findStarsByImageId($image->getId());
+            $image->setStars($stars);
+        }
+        return $image;
+    }
+
+    /**
      * Retourne l'image précédant celle ayant l'id passé en paramètre
      * @param $id
      * @return Image|NULL
