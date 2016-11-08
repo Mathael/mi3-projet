@@ -10,18 +10,9 @@ use App\utils\Util;
  * @author LEBOC Philippe.
  * Date: 28/10/2016
  * Time: 22:32
- *
- * TODO: Check USER ACCESS
  */
 final class AlbumController implements DefaultController
 {
-    /**
-     * Depuis l'index, l'utilisateur peut :
-     * - Voir la liste de ses albums
-     * - Consulter un album via un bouton sur un des albums de l'utilisateur
-     * - Editer un album via un bouton sur un des albums de l'utilisateur
-     * - Créer un album via un bouton
-     */
     public static function indexAction()
     {
         global $user;
@@ -43,6 +34,10 @@ final class AlbumController implements DefaultController
 
     public static function createAction() {
         global $user;
+        if($user->getRole() == User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
         $name = Util::getValue($_POST, 'name', null);
 
         if(!empty($name)) {
@@ -57,6 +52,11 @@ final class AlbumController implements DefaultController
     }
 
     public static function showAction() {
+        global $user;
+        if($user->getRole() == User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
         $id = Util::getValue($_GET, 'id', null);
 
         if($id == null) return self::indexAction();
@@ -75,6 +75,11 @@ final class AlbumController implements DefaultController
     }
 
     public static function addImageAction() {
+        global $user;
+        if($user->getRole() == User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
         $image = Util::getValue($_POST, 'image', null);
         $album = Util::getValue($_POST, 'album', null);
         if($image == null || $album == null){
@@ -89,22 +94,23 @@ final class AlbumController implements DefaultController
     }
 
     public static function addToAlbumAction() {
-        $image = Util::getValue($_GET, 'image', null);
+        global $user;
+        if($user->getRole() == User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
 
+        $image = Util::getValue($_GET, 'image', null);
         $select = '';
-        $userId = $_SESSION['user_id'];
-        if(!empty($userId))
+
+        $albums = AlbumDao::findAllByOwnerId($user->getId());
+        if(!empty($albums))
         {
-            $albums = AlbumDao::findAllByOwnerId($userId);
-            if(!empty($albums))
+            $select .= '<select name=\'album\'>';
+            foreach($albums as $album)
             {
-                $select .= '<select name=\'album\'>';
-                foreach($albums as $album)
-                {
-                    $select .= '<option value=\''.$album->getId().'\' >'.$album->getName().'</option>';
-                }
-                $select .= '</select>';
+                $select .= '<option value=\''.$album->getId().'\' >'.$album->getName().'</option>';
             }
+            $select .= '</select>';
         }
 
         $response = new Response('album/choose_album');
