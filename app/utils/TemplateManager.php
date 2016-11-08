@@ -23,7 +23,7 @@ class TemplateManager
 
     /**
      * TemplateManager constructor.
-     * Il est obligatoire d'appeler init($file)
+     * Il est obligatoire d'appeler init($filename)
      */
     function __construct() {}
 
@@ -43,7 +43,7 @@ class TemplateManager
             ->setStream($this->getContent($file));
     }
 
-    // Ne supporte pas les tableaux de valeurs [1, 2, 3, 4, 5, 6] or ['key' => 1, ...]
+    // Ne supporte pas les tableaux de types primitifs [1, 2, 3, 4, 5, 6] or ['key' => 1, ...]
     public function assign($key, $something) {
         $result = '';
 
@@ -246,6 +246,10 @@ class TemplateManager
         if(empty($file)) return '';
         return file_get_contents(VIEW_DIR.$file.'.html');
     }
+
+    //
+    //  Getters & Setters
+    //
 
     /**
      * @return string

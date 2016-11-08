@@ -29,6 +29,11 @@ final class SessionController implements DefaultController
      * Connecte l'utilisateur (session)
      */
     public static function loginAction() {
+        global $user;
+        if($user->getRole() != User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
         $username = Util::getValue($_POST, 'username', null);
         $password = Util::getValue($_POST, 'password', null);
 
@@ -80,7 +85,16 @@ final class SessionController implements DefaultController
         return IndexController::indexAction();
     }
 
+    /**
+     * Affiche le formulaire d'inscription
+     * @return Response
+     */
     public static function registerformAction() {
+        global $user;
+        if($user->getRole() != User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
         return new Response('sessions/register');
     }
 
@@ -88,6 +102,11 @@ final class SessionController implements DefaultController
      * Crée un utilisateur et l'insert en base de donnée puis connecte immédiatement le nouvel utilisateur
      */
     public static function registerAction() {
+        global $user;
+        if($user->getRole() != User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
         $username = Util::getValue($_POST, 'username', null);
         $password = Util::getValue($_POST, 'password', null);
         $password2nd = Util::getValue($_POST, 'password2nd', null);

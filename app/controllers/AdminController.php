@@ -25,18 +25,6 @@ final class AdminController implements DefaultController {
     }
 
     /**
-     * http://my-url/?page=admin&action=addImage
-     */
-    public static function addImageAction() {
-        global $user;
-        if($user->getRole() != User::ROLE_ADMIN) {
-            return IndexController::indexAction();
-        }
-
-        // WHERE IS MY CODE ?? !!!!!!!!
-    }
-
-    /**
      * http://my-url/?page=admin&action=removeImage
      */
     public static function removeImageAction() {

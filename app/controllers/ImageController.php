@@ -4,6 +4,7 @@ namespace App\controllers;
 
 use App\dao\ImageDAO;
 use App\model\Image;
+use App\model\User;
 use App\utils\Response;
 use App\utils\Util;
 
@@ -85,6 +86,11 @@ final class ImageController implements DefaultController {
     }
 
     public static function voteAction() {
+        global $user;
+        if($user->getRole() == User::ROLE_ANONYMOUS) {
+            return IndexController::indexAction();
+        }
+
         $id = Util::getValue($_GET, 'id', null);
         $vote = Util::getValue($_GET, 'stars', null);
 
