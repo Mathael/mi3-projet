@@ -87,7 +87,10 @@ final class AdminController implements DefaultController {
             }
         }
 
-        $response->getTemplate()->assign('Image.id', $image->getId()); // TODO change to assign normal (need refactor template manager)
+        $response->getTemplate()->assign('Image.id', $image->getId()); // TODO change
+        $response->getTemplate()->assign('Image.comment', $image->getComment()); // TODO change
+        $response->getTemplate()->assign('Image.category', $image->getCategory()); // TODO change
+        $response->getTemplate()->assign('Image.url', $image->getUrl()); // TODO change
         $response->getTemplate()->assign('result', ''); // clean; TODO
         return $response;
     }
@@ -120,7 +123,15 @@ final class AdminController implements DefaultController {
         $categories = ImageDAO::getCategories();
 
         $response = new Response('admin/image_create_form');
-        $response->getTemplate()->assignArrayTemplate('categories', 'admin/image_create_form_small', 'category', $categories);
+        $response->getTemplate()->assign('categories', self::buildCategories($categories) );
         return $response;
+    }
+
+    private static function buildCategories($categories) {
+        $res = '';
+        foreach ($categories as $category) {
+            $res .= '<option value="'.$category.'">'.$category.'</option>';
+        }
+        return $res;
     }
 }

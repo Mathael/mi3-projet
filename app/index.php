@@ -42,8 +42,7 @@ Autoloader::register();
 // Ce qui change c'est son niveau d'accès
 $user = null;
 
-if(empty($_SESSION['authenticated']) || !($_SESSION['authenticated'])) {
-    global $user;
+if(empty($_SESSION['user'])) {
     $user = new User([
         'id' => -1,
         'username' => 'Anonymous',
@@ -53,13 +52,7 @@ if(empty($_SESSION['authenticated']) || !($_SESSION['authenticated'])) {
 }
 else
 {
-    global $user;
-    $user = new User([
-        'id' => $_SESSION['user_id'],
-        'username' => $_SESSION['user_username'],
-        'password' => 'You should not pass !',
-        'role' => $_SESSION['user_role']
-    ]);
+    $user = $_SESSION['user'];
 }
 
 // Récupère la page vers laquelle l'utilisaur souhaite se rendre.

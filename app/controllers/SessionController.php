@@ -52,14 +52,9 @@ final class SessionController implements DefaultController
         session_reset();
         $_SESSION = [];
 
-        // Actuellement, seul l'admin se connecte donc tous les comptes sont admin.
-        $_SESSION['authenticated'] = true;
-        $_SESSION['user_role'] = $dbuser->getRole();
-        $_SESSION['user_username'] = $dbuser->getUsername();
-        $_SESSION['user_id'] = $dbuser->getId();
-
         global $user;
         $user = $dbuser;
+        $_SESSION['user'] = $user;
 
         // Redirige vers la page d'index
         // TODO: notifier l'utilisateur qu'il est bien connecté
@@ -70,7 +65,7 @@ final class SessionController implements DefaultController
      * Déconnecte l'utilisateur (session)
      */
     public static function logoutAction(){
-        if(!empty($_SESSION['authenticated'])) {
+        if(!empty($_SESSION['user'])) {
             global $user;
             $user = new User([
                 'id' => -1,
@@ -79,7 +74,8 @@ final class SessionController implements DefaultController
                 'role' => 0
             ]);
             $_SESSION = [];
-            session_destroy();
+            session_reset();
+            $_SESSION['user'] = $user;
         }
 
         return IndexController::indexAction();
@@ -136,13 +132,10 @@ final class SessionController implements DefaultController
         }
 
         session_reset();
-        $_SESSION['authenticated'] = true;
-        $_SESSION['user_role'] = $dbuser->getRole();
-        $_SESSION['user_username'] = $dbuser->getUsername();
-        $_SESSION['user_id'] = $dbuser->getId();
 
         global $user;
         $user = $dbuser;
+        $_SESSION['user'] = $user;
 
         // Retour à l'index
         return IndexController::indexAction();

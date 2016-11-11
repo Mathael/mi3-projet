@@ -46,9 +46,6 @@ final class ImageController implements DefaultController {
         return $response;
     }
 
-    /**
-     * @return Response affichage de la dernière image de la base de donnée
-     */
     public static function lastAction() {
         $image = ImageDAO::findLast();
 
@@ -151,7 +148,7 @@ final class ImageController implements DefaultController {
     public static function categoryAction(){
         $category = Util::getValue($_POST, 'category', null);
 
-        if($category == null) return self::indexAction();
+        if($category == null || $category == 'null') return self::indexAction();
 
         $images = ImageDAO::getImageByCategorie($category);
 
@@ -180,7 +177,7 @@ final class ImageController implements DefaultController {
 
     private static function buildCategory(){
         $categories  = ImageDAO::getCategories();
-        $options = '';
+        $options = '<option value="null">Aucun</option>';
 
         foreach ($categories as $category){
             $options .= '<option value="'.$category.'">'.$category.'</option>';

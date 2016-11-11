@@ -12,8 +12,8 @@ use ReflectionProperty;
  * Date: 22/10/2016
  * Time: 21:50
  *
- * Cette classe à pour objectif de retirer le code PHP de nos templates et
- * de mettre en place une réelle séparation.
+ * Cette classe à pour objectif de de mettre en place une réelle séparation entre
+ * la partie statique (HTML) et la partie dynamique (PHP)
  */
 class TemplateManager
 {
@@ -44,14 +44,15 @@ class TemplateManager
     }
 
     // Ne supporte pas les tableaux de types primitifs [1, 2, 3, 4, 5, 6] or ['key' => 1, ...]
+    // Il faut utiliser assignArray pour les tableaux de types primitifs
     public function assign($key, $something) {
         $result = '';
 
         if(!is_array($something))
         {
             if(is_object($something)) {
-                // Exemple : assignAlpha('image' => $image);
-                $result = $this->assignObjectAlpha($something);
+                // Exemple : assign('image' => $image);
+                $result = $this->assignObject($something);
             } else {
                 // Exemple : assignAlpha('id' => 123);
                 $result = $something;
@@ -59,9 +60,9 @@ class TemplateManager
         }
         else
         {
-            // Exemple : assignAlpha([Image, Image, Image ...]);
+            // Exemple : assign([Image, Image, Image ...]);
             foreach ($something as $object) {
-                $result .= $this->assignObjectAlpha($object);
+                $result .= $this->assignObject($object);
             }
         }
 
@@ -72,7 +73,7 @@ class TemplateManager
      * @param Object $object l'objet dont les attributs vont être liés au flux HTML
      * @return string le flux html de l'objet créé à partir d'un fichier html contenant "_small"
      */
-    private function assignObjectAlpha($object)
+    private function assignObject($object)
     {
         global $user;
         $result = $user->getRole() == User::ROLE_ADMIN ? $this->getContent($this->getDirectory().'/'.$this->getFilename().'_small_admin') : $this->getContent($this->getDirectory().'/'.$this->getFilename().'_small');
@@ -143,28 +144,6 @@ class TemplateManager
     }
 
     /**
-     * Remplace chaque {{$key}} de la vue, par la valeur correspondante du tableau associatif
-     * @param $array array
-     */
-    public function assignArray($array) {
-        foreach ($array as $key => $value) {
-            $this->assignKeyValue($key, $value);
-        }
-    }
-
-    public function assignArrayTemplate($key, $template, $templateKey, $values) {
-        $result = '';
-        $template = $this->getContent($template);
-
-        foreach ($values as $value) {
-            $result .= $template;
-            $result = str_replace('{{'.$templateKey.'}}', $value, $result);
-        }
-
-        $this->assignKeyValue($key, $result);
-    }
-
-    /**
      * @param $key string : chaine de caractères présente dans le HTML sous forme {{valeur}}
      * @param $value string : valeur réelle
      */
@@ -189,7 +168,7 @@ class TemplateManager
     }
 
     /**
-     * Ajoute le contenu d'une page HTML dans la variable $file
+     * Ajoute le contenu d'une page HTML dans le le flux HTML du template manager
      * @param $html
      * @return $this
      */
@@ -223,7 +202,7 @@ class TemplateManager
         $left = '';
         $right = '';
 
-        if(!empty($_SESSION['authenticated'])) {
+        if(!empty($_SESSION['user'])) {
             $left .= '<li class="nav-item"><a class="nav-link" href="?page=album"><i class="fa fa-book" aria-hidden="true"></i> Albums</a></li>';
             if($user->getRole() == User::ROLE_ADMIN)
                 $right .= '<li class="nav-item"><a class="nav-link" href="?page=admin"><i class="fa fa-cog" aria-hidden="true"></i> Administration</a></li>';
@@ -247,9 +226,9 @@ class TemplateManager
         return file_get_contents(VIEW_DIR.$file.'.html');
     }
 
-    //
-    //  Getters & Setters
-    //
+    //////////////////////////
+    //  Getters & Setters   //
+    //////////////////////////
 
     /**
      * @return string

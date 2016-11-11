@@ -33,7 +33,7 @@ class User
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function getId()
     {
@@ -41,10 +41,10 @@ class User
     }
 
     /**
-     * @param $id
-     * @return $this
+     * @param mixed $id
+     * @return User
      */
-    private function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
         return $this;
@@ -103,6 +103,4 @@ class User
         $this->role = $role;
         return $this;
     }
-
-
 }
