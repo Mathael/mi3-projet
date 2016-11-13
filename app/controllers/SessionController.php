@@ -30,6 +30,7 @@ final class SessionController implements DefaultController
      */
     public static function loginAction() {
         global $user;
+
         if($user->getRole() != User::ROLE_ANONYMOUS) {
             return IndexController::indexAction();
         }
@@ -49,10 +50,9 @@ final class SessionController implements DefaultController
         }
 
         // Remet à zéro la session anonyme pour démarrer une session utilisateur
-        session_reset();
         $_SESSION = [];
+        session_reset();
 
-        global $user;
         $user = $dbuser;
         $_SESSION['user'] = $user;
 
@@ -65,17 +65,17 @@ final class SessionController implements DefaultController
      * Déconnecte l'utilisateur (session)
      */
     public static function logoutAction(){
+        global $user;
+
         if(!empty($_SESSION['user'])) {
-            global $user;
             $user = new User([
                 'id' => -1,
                 'username' => 'Anonymous',
                 'password' => '',
                 'role' => 0
             ]);
-            $_SESSION = [];
             session_reset();
-            $_SESSION['user'] = $user;
+            $_SESSION = [];
         }
 
         return IndexController::indexAction();
@@ -133,7 +133,6 @@ final class SessionController implements DefaultController
 
         session_reset();
 
-        global $user;
         $user = $dbuser;
         $_SESSION['user'] = $user;
 

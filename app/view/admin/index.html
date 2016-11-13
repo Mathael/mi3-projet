@@ -1,3 +1,32 @@
 <section>
     <a class="btn btn-primary btn-sm" href="?page=admin&action=createImageForm">Nouvelle Image</a>
 </section>
+<hr>
+<section>
+    <form method="POST" action="?page=admin&action=addCategory" accept-charset="UTF-8">
+        <label for="addcategory">Ajout d'une catégorie</label>
+        <input type="text" name="name" id="addcategory" placeholder="Nom de la nouvelle catégorie" />
+        <input type="submit" value="Ajouter" disabled/>
+    </form>
+</section>
+<hr>
+<section>
+    <form method="POST" action="?page=admin&action=editCategory" accept-charset="UTF-8">
+        <label for="editcategory">Modification d'une catégorie</label>
+        <input type="text" name="name" id="editcategory" placeholder="Nouveau nom" />
+        <select name="category" required>
+            {{categories}}
+        </select>
+        <input type="submit" value="Modifier" disabled/>
+    </form>
+</section>
+<hr>
+<section>
+    <form method="POST" action="?page=admin&action=removeCategory" accept-charset="UTF-8">
+        <label for="delcategory">Suppression d'une catégorie</label>
+        <select name="category" id="delcategory" required>
+            {{categories}}
+        </select>
+        <input type="submit" value="Supprimer" disabled/>
+    </form>
+</section>

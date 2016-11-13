@@ -310,4 +310,14 @@ final class ImageDAO implements CrudDao {
         }
         return $table;
     }
+
+    /**
+     * @param $category la catégorie a supprimer
+     * @return bool true si l'opération réussie, false sinon
+     */
+    public static function removeCategory($category) {
+        $stmt = Database::getInstance()->prepare('UPDATE image SET category = `Aucune caégorie` WHERE category = :category');
+        $stmt->bindValue('category', $category);
+        return $stmt->execute();
+    }
 }

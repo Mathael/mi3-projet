@@ -177,7 +177,7 @@ final class ImageController implements DefaultController {
 
     private static function buildCategory(){
         $categories  = ImageDAO::getCategories();
-        $options = '<option value="null">Aucun</option>';
+        $options = '';
 
         foreach ($categories as $category){
             $options .= '<option value="'.$category.'">'.$category.'</option>';

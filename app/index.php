@@ -7,8 +7,6 @@ use App\utils\Autoloader;
 use App\utils\Response;
 use App\utils\TemplateManager;
 
-session_start();
-
 /**
  * @author: LEBOC Philippe
  * Date: 07/10/2016
@@ -37,6 +35,8 @@ define('UPLOAD_DIR', PROJECT_DIR.'assets'.DS.'images'.DS.'upload'.DS);
 
 require UTIL_DIR.'Autoloader.php';
 Autoloader::register();
+
+session_start();
 
 // Toute connexion crée un User
 // Ce qui change c'est son niveau d'accès

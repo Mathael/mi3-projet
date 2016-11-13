@@ -1,6 +1,7 @@
 <?php
 
 namespace App\controllers;
+use App\dao\Database;
 use App\dao\ImageDAO;
 use App\model\Image;
 use App\model\User;
@@ -21,7 +22,11 @@ final class AdminController implements DefaultController {
             return IndexController::indexAction();
         }
 
-        return new Response('admin/index');
+        $categories = ImageDAO::getCategories();
+
+        $response = new Response('admin/index');
+        $response->getTemplate()->assign('categories', self::buildCategories($categories));
+        return $response;
     }
 
     /**
@@ -125,6 +130,16 @@ final class AdminController implements DefaultController {
         $response = new Response('admin/image_create_form');
         $response->getTemplate()->assign('categories', self::buildCategories($categories) );
         return $response;
+    }
+
+    public static function removeCategory() {
+        global $user;
+        if($user->getRole() != User::ROLE_ADMIN) return IndexController::indexAction();
+
+        $category = Util::getValue($_POST, 'category', null);
+        if(empty($category)) return AdminController::indexAction();
+
+        return ImageDAO::removeCategory($category);
     }
 
     private static function buildCategories($categories) {
