@@ -14,7 +14,7 @@ class Config
     const DATABASE_URL = 'localhost';
     const DATABASE_TYPE = 'mysql';
     const DATABASE_PORT = '3306';
-    const DATABASE_NAME = 'php-image-project';
+    const DATABASE_NAME = 'test';
     const DATABASE_USER = 'root';
     const DATABASE_PASSWORD = '';
 

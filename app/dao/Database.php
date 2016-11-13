@@ -39,4 +39,17 @@ final class Database {
             self::$_instance = null;
         }
     }
+
+    public static function install() {
+        $files = ['create', 'insert'];
+
+        foreach ($files as $file)
+        {
+            $request = '';
+            $request = file_get_contents("sql/$file.sql");
+            $request = str_replace("\n","",$request); // supprime les retours chariots
+            $request = str_replace("\r","",$request); // supprime les retours chariots
+            self::getInstance()->exec($request);
+        }
+    }
 }

@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `image_stars`;
+DROP TABLE IF EXISTS `album_images`;
 DROP TABLE IF EXISTS `image`;
 DROP TABLE IF EXISTS `album`;
 DROP TABLE IF EXISTS `user`;

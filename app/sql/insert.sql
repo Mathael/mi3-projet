@@ -1,3 +1,5 @@
+INSERT INTO `user` VALUES(1, 'admin', 'admin', 2);
+INSERT INTO `user` VALUES(2, 'user1', 'user1', 1);
 INSERT INTO image VALUES ('1', 'jons/external/45325main_69_rs4.jpg', "NASA", "Buzz Aldrin's bootprint");
 INSERT INTO image VALUES ('2', 'jons/external/49566main_83_rs4.jpg', "NASA", "Mars");
 INSERT INTO image VALUES ('3', 'jons/external/51678main_isabel_new_high.jpg', "NASA", "Hurricane Isabel");
